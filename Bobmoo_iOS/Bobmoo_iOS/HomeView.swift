@@ -9,7 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        Text("Home")
+        BobmooText("운영종료", style: .body_m_11)
+            .foregroundStyle(.Bobmoo_White)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 1.5)
+            .background(.Bobmoo_Red)
+            .clipShape(Capsule())
     }
 }
 
