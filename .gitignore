@@ -6,3 +6,6 @@
 **/xcuserdata/
 **/*.xcuserstate
 **/xcschememanagement.plist
+
+# Environment files
+.env
