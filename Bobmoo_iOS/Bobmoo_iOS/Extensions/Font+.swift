@@ -137,23 +137,19 @@ private struct BobmooTypographyModifier: ViewModifier {
     }
 }
 
-struct BobmooText<Content: View>: View {
+struct BobmooText: View {
+    private let text: String
     private let style: BobmooFontName
     private let multiline: Bool
-    private let content: Content
 
-    init(
-        _ style: BobmooFontName,
-        multiline: Bool = false,
-        @ViewBuilder content: () -> Content
-    ) {
+    init(_ text: String, style: BobmooFontName, multiline: Bool = false) {
+        self.text = text
         self.style = style
         self.multiline = multiline
-        self.content = content()
     }
 
     var body: some View {
-        content
+        Text(text)
             .bobmooTypography(style, multiline: multiline)
     }
 }
