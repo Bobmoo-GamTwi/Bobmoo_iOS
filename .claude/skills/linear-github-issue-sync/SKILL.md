@@ -60,6 +60,7 @@ If the user provides details/checklist, replace the default To-Do item with conc
    - Add `GitHub: <url>` to Linear issue description.
    - Add `Linear: <url>` to GitHub issue body (or as first comment if body update is restricted).
 6. Return both identifiers/URLs in one response.
+7. Do not proceed to implementation/PR workflow until both URLs are confirmed and visible.
 
 ## Priority and Label Heuristic
 
@@ -91,9 +92,11 @@ Fallbacks when inference is weak:
   - keep Linear issue open
   - comment on Linear with `GitHub creation failed` reason
   - report partial success clearly
+  - block implementation/PR start until GitHub issue is created and cross-linked
 - If GitHub succeeds and Linear fails:
   - comment on GitHub with `Linear creation failed` reason
   - report partial success clearly
+  - block implementation/PR start until Linear issue is created and cross-linked
 - Never silently fail one side.
 - Never omit priority/labels silently. If setting fails, report explicit reason and retry once with fallback values.
 
