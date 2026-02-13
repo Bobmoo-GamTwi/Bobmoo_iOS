@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Xcode user-specific files
+**/xcuserdata/
+**/*.xcuserstate
+**/xcschememanagement.plist
+
+# Environment files
+.env
