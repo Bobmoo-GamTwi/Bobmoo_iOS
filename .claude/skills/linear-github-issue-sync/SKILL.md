@@ -9,6 +9,7 @@ description: Create Linear and GitHub issues together with the same core content
 
 - User asks to create a Linear issue and GitHub issue at the same time.
 - User asks to keep Linear/GitHub issue content synchronized at creation time.
+- User asks `작업 준비` for an existing Linear issue key (for example `BOB-123`) and needs missing GitHub issue + links prepared.
 
 ## Required Convention
 
@@ -61,6 +62,21 @@ If the user provides details/checklist, replace the default To-Do item with conc
    - Add `Linear: <url>` to GitHub issue body (or as first comment if body update is restricted).
 6. Return both identifiers/URLs in one response.
 7. Do not proceed to implementation/PR workflow until both URLs are confirmed and visible.
+
+## Existing Linear Issue Preparation Flow (Mandatory)
+
+If user explicitly references an existing Linear issue key and asks `작업 준비`:
+
+1. Reuse the referenced Linear issue. Do not create a new Linear issue.
+2. Check whether a linked GitHub issue already exists.
+3. If missing, create a GitHub issue using the Linear issue's normalized title/body.
+4. Ensure cross-links on both sides:
+   - Linear description or attachments must contain GitHub issue URL.
+   - GitHub body/comment must contain Linear issue URL.
+5. Return readiness result with:
+   - Linear identifier/URL
+   - GitHub issue number/URL (existing or newly created)
+   - Link sync status (`verified` or `created and linked`)
 
 ## Priority and Label Heuristic
 

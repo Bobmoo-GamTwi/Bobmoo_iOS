@@ -10,6 +10,8 @@ description: Enforces Linear MCP issue creation defaults: state TODO, assignee t
 - User asks to create a Linear issue/ticket/task.
 - User asks to file a bug/task/chore into Linear via MCP.
 
+If user explicitly references an existing Linear issue key (for example `BOB-123`) and asks `작업 준비`, do not create a new Linear issue. Reuse that issue and hand over to `linear-github-issue-sync` flow for GitHub issue/link preparation.
+
 ## Required Policy
 
 When creating a Linear issue, apply all rules below.
@@ -129,3 +131,4 @@ Always include:
 - Do not omit priority.
 - Do not omit labels.
 - If `Todo` state does not exist, pick the closest planned state and mention fallback explicitly.
+- If user specified an existing Linear issue key for `작업 준비`, never create a duplicate Linear issue.
