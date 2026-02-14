@@ -22,6 +22,8 @@
 2. 이슈를 생성한다.
    - `작업 시작`, `작업 시작하자`, `시작하자` 트리거가 들어오면 반드시 **Linear + GitHub 동시 생성**을 기본으로 한다.
    - `작업 준비`, `작업 준비하자`, `준비하자`처럼 준비 뉘앙스의 트리거도 동일하게 **Linear + GitHub 동시 생성**을 기본으로 한다.
+   - 단, 사용자가 이미 존재하는 Linear 이슈(예: `BOB-123`)를 기준으로 `작업 준비`를 요청하면 새 Linear 이슈를 만들지 않는다.
+     - 이 경우 누락된 GitHub 이슈를 생성/연결하고, 해당 이슈 키 기반 브랜치를 준비한다.
    - 두 이슈는 동일 제목/본문을 사용하고 상호 링크를 남긴다.
 3. 이슈 키 기반 브랜치를 만든다.
    - 브랜치 형식: `/git-master/SKILL.md`에서 정의한 브랜치 네이밍을 따른다.
@@ -46,6 +48,9 @@
 - 커밋 메시지는 한국어 중심으로 작성하고, 기술 용어는 필요할 때만 영어를 혼용한다.
 - 영어-only 커밋 메시지는 사용하지 않는다.
 - 예시: `#13 BobmooText 스타일 전환 및 lineHeight 적용`
+- 자동 생성 서명/광고성 문구를 커밋 메시지에 포함하지 않는다.
+  - 금지 예시: `Pasted Ultraworked with [Sisyphus](...)`, `Co-authored-by: Sisyphus <clio-agent@sisyphuslabs.ai>`
+  - 원칙: 실제 공동 작업자가 아닌 에이전트/봇 서명, 도구 홍보 문구는 항상 제거한다.
 - 커밋 실행 전 아래 체크를 반드시 통과한다.
   1) 현재 브랜치에서 이슈번호를 확인할 수 있는가 (`prefix/#123-...`)
   2) 커밋 메시지가 `#123 ...` 패턴을 만족하는가
@@ -90,6 +95,27 @@
 - 커밋 메시지 컨벤션(`#이슈번호 커밋내용`) 미준수 상태로는 커밋하지 않는다.
 - 사용자의 명시적 허락 없이 GitHub remote로 `push`하지 않는다.
 
+## SwiftUI Asset Style Convention (Mandatory)
+
+- SwiftUI에서 에셋 기반 아이콘/색상 사용 시 아래 스타일을 우선 적용한다.
+- 이미지는 `Image("...")` 문자열보다 타입 세이프 자원 접근(`Image(.search)`)을 기본으로 사용한다.
+- 컬러/스트로크도 토큰 스타일(`.stroke(.bobmooDarkGray, lineWidth: 1.5)`)을 기본으로 사용한다.
+- 예시:
+
+```swift
+Button(action: {
+}) {
+    Image(.search)
+}
+.buttonStyle(.plain)
+.padding(.trailing, 14)
+
+.overlay(
+    RoundedRectangle(cornerRadius: 20)
+        .stroke(.bobmooDarkGray, lineWidth: 1.5)
+)
+```
+
 ## Start Trigger Protocol (Mandatory)
 
 - 사용자가 `작업 시작`, `작업 시작하자`, `시작하자`처럼 구현 시작 의도를 말하면 아래 순서를 즉시 수행한다.
@@ -97,6 +123,10 @@
   1) `linear-issue-policy`를 적용해 Linear 이슈 생성
   2) `linear-github-issue-sync`를 적용해 GitHub 이슈 동시 생성 및 상호 링크 확인
   3) `git-master` 규칙으로 이슈 키 기반 브랜치 생성 후 해당 브랜치에서만 작업 시작
+- 예외: 사용자가 기존 Linear 이슈 키(예: `BOB-123`)를 명시하며 `작업 준비`를 요청한 경우
+  1) 해당 Linear 이슈를 재사용한다 (새 Linear 이슈 생성 금지)
+  2) GitHub 이슈가 없으면 생성하고, 있으면 링크 상태만 검증한다
+  3) `git-master` 규칙으로 해당 이슈 키 기반 브랜치를 생성/전환한다
 - `작업 시작`/`작업 준비` 트리거만으로는 구현(코드 생성/수정)을 시작하지 않는다.
   - 이 단계의 기본 동작은 **이슈 2종 + 브랜치 준비 완료까지**로 제한한다.
   - 구현에 착수할 때는 먼저 해당 Linear 이슈 상태를 `In Progress`로 변경한 뒤 진행한다.

@@ -8,11 +8,37 @@
 import SwiftUI
 
 struct BobmooTextField: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    @Binding var query: String
+    var onSearch: (String) -> Void = { _ in }
 
-#Preview {
-    BobmooTextField()
+    private func submitSearch() {
+        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedQuery.isEmpty else { return }
+        onSearch(trimmedQuery)
+    }
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            TextField("검색어를 입력해주세요.", text: $query)
+                .bobmooFont(.body_m_15)
+                .submitLabel(.search)
+                .onSubmit(submitSearch)
+                .padding(.leading, 17)
+            
+            Spacer()
+
+            Button(action: {
+                submitSearch()
+            }) {
+                Image(.search)
+            }
+            .buttonStyle(.plain)
+            .padding(.trailing, 14)
+        }
+        .padding(.vertical, 11)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(.bobmooDarkGray, lineWidth: 1.5)
+        )
+    }
 }
