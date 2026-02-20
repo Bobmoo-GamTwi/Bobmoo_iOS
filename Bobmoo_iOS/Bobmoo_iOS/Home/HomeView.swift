@@ -16,43 +16,81 @@ struct HomeView: View {
     }
        
     var body: some View {
-        Group {
-            if viewModel.isEmptyMenu {
-                VStack(spacing: 0) {
-                    HeaderView(viewModel: viewModel)
+        VStack(spacing: 0) {
+            HeaderView(viewModel: viewModel)
 
-                    ScrollView(showsIndicators: false) {
-                        EmptyView()
-                    }
-                    .scrollBounceBehavior(.always)
-                    .refreshable {
-                        await viewModel.load()
+            TabView(selection: $viewModel.selectedTab) {
+                DayMenuPageView(date: viewModel.dateForTab(0), viewModel: viewModel)
+                    .tag(0)
+
+                DayMenuPageView(date: viewModel.dateForTab(1), viewModel: viewModel)
+                    .tag(1)
+
+                DayMenuPageView(date: viewModel.dateForTab(2), viewModel: viewModel)
+                    .tag(2)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .onChange(of: viewModel.selectedTab) { _, newTab in
+                guard newTab != 1 else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    var transaction = Transaction()
+                    transaction.disablesAnimations = true
+                    withTransaction(transaction) {
+                        viewModel.handleTabChange(newTab)
                     }
                 }
+            }
+        }
+        .ignoresSafeArea(edges: .top)
+        .background(Color.bobmooGray4.ignoresSafeArea())
+    }
+}
+
+struct DayMenuPageView: View {
+    let date: Date
+    let viewModel: HomeViewModel
+
+    var body: some View {
+        let cafeterias = viewModel.menu(for: date)?.cafeterias ?? []
+
+        Group {
+            if viewModel.isEmptyMenu(for: date) {
+                ScrollView(showsIndicators: false) {
+                    EmptyView()
+                }
+                .scrollBounceBehavior(.always)
+                .refreshable {
+                    await viewModel.reloadDate(date)
+                }
                 .transition(.opacity)
+            } else if cafeterias.isEmpty {
+                ScrollView(showsIndicators: false) {
+                    ProgressView()
+                        .padding(.top, 100)
+                }
+                .refreshable {
+                    await viewModel.reloadDate(date)
+                }
+                .task {
+                    await viewModel.loadIfNeeded(date: date)
+                }
             } else {
                 let now = Date()
 
                 ScrollView(showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: 0) {
-                        HeaderView(viewModel: viewModel)
-
-                        ForEach(viewModel.mealSectionOrder(now: now), id: \.self) { section in
-                            MealSectionCardView(section: section, viewModel: viewModel)
+                        ForEach(viewModel.mealSectionOrder(now: now, cafeterias: cafeterias), id: \.self) { section in
+                            MealSectionCardView(section: section, cafeterias: cafeterias)
                         }
                     }
+                }
+                .refreshable {
+                    await viewModel.reloadDate(date)
                 }
                 .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: viewModel.isEmptyMenu)
-        .ignoresSafeArea(edges: .top)
-        .background(Color.bobmooGray4.ignoresSafeArea())
-        .task {
-            if viewModel.menu == nil {
-                await viewModel.load()
-            }
-        }
+        .animation(.easeInOut(duration: 0.25), value: cafeterias.isEmpty)
     }
 }
 
@@ -84,7 +122,7 @@ struct HeaderView: View {
 
 struct MealSectionCardView: View {
     let section: HomeViewModel.MealSection
-    let viewModel: HomeViewModel
+    let cafeterias: [Cafeteria]
 
     private func priceText(_ value: Int) -> String {
         "\(value)원"
@@ -92,7 +130,6 @@ struct MealSectionCardView: View {
 
     var body: some View {
         let now = Date()
-        let cafeterias = viewModel.menu?.cafeterias ?? []
 
         VStack(alignment: .leading, spacing: 0) {
             BobmooText(section.title, style: .head_b_21)
@@ -191,6 +228,7 @@ struct EmptyView: View {
             BobmooText("아래로 당겨 새로고침", style: .body_sb_11)
                 .foregroundStyle(.bobmooGray3)
                 .padding(.top, 7)
+                .padding(.bottom, 128)
             
             Spacer()
         }
