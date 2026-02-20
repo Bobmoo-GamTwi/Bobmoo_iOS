@@ -23,6 +23,7 @@ extension Font {
 }
 
 enum BobmooFontName {
+    case head_b_48
     case head_b_30
     case head_b_21
     case title_sb_30
@@ -39,7 +40,7 @@ enum BobmooFontName {
 
     var weight: Font.PretendardWeight {
         switch self {
-        case .head_b_30, .head_b_21:
+        case .head_b_48, .head_b_30, .head_b_21:
             return .bold
         case .body_m_15, .body_m_11:
             return .medium
@@ -52,6 +53,8 @@ enum BobmooFontName {
 
     var size: CGFloat {
         switch self {
+        case .head_b_48:
+            return 48
         case .head_b_30:
             return 30
         case .head_b_21:
@@ -81,7 +84,7 @@ enum BobmooFontName {
 
     var letterSpacingPercent: CGFloat {
         switch self {
-        case .head_b_30:
+        case .head_b_48, .head_b_30:
             return 2
         case .head_b_21, .title_sb_30, .body_sb_18:
             return 5
