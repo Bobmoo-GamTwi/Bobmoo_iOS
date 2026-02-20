@@ -7,31 +7,31 @@
 
 import Foundation
 
-struct DailyMenuResponse: Decodable {
+struct DailyMenuResponse: Decodable, Sendable {
     let date: String
     let school: String
     let cafeterias: [Cafeteria]
 }
 
-struct Cafeteria: Decodable {
+struct Cafeteria: Decodable, Sendable {
     let name: String
     let hours: Hours
     let meals: Meals
 }
 
-struct Hours: Decodable {
+struct Hours: Decodable, Sendable {
     let breakfast: String
     let lunch: String
     let dinner: String
 }
 
-struct Meals: Decodable {
+struct Meals: Decodable, Sendable {
     let breakfast: [MealItem]?
     let lunch: [MealItem]?
     let dinner: [MealItem]?
 }
 
-struct MealItem: Decodable {
+struct MealItem: Decodable, Sendable {
     let course: String
     let mainMenu: String
     let price: Int

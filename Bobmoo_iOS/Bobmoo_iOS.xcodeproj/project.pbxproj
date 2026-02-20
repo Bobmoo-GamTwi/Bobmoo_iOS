@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CA47C2A02F488B33000D809C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CA47C29F2F488B33000D809C /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		CA8053762F3F3CF80013A6A0 /* Bobmoo_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bobmoo_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA47C2A02F488B33000D809C /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = Bobmoo_iOS;
 			packageProductDependencies = (
+				CA47C29F2F488B33000D809C /* Alamofire */,
 			);
 			productName = Bobmoo_iOS;
 			productReference = CA8053762F3F3CF80013A6A0 /* Bobmoo_iOS.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = CA80536D2F3F3CF70013A6A0;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CA8053772F3F3CF80013A6A0 /* Products */;
 			projectDirPath = "";
@@ -127,6 +136,8 @@
 /* Begin XCBuildConfiguration section */
 		CA80537F2F3F3CF80013A6A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CA8053782F3F3CF80013A6A0 /* Bobmoo_iOS */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -191,6 +202,8 @@
 		};
 		CA8053802F3F3CF80013A6A0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = CA8053782F3F3CF80013A6A0 /* Bobmoo_iOS */;
+			baseConfigurationReferenceRelativePath = Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -336,6 +349,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.11.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CA47C29F2F488B33000D809C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CA80536E2F3F3CF80013A6A0 /* Project object */;
 }
