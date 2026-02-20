@@ -46,8 +46,8 @@ struct SplashView: View {
                 .padding(.bottom, 21)
         }
         .task {
-            if homeViewModel.menu == nil {
-                await homeViewModel.load()
+            if !homeViewModel.isPreloaded {
+                await homeViewModel.preload()
             }
         }
     }

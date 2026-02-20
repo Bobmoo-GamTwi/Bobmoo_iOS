@@ -7,7 +7,7 @@ struct RootView: View {
     }
 
     @State private var route: Route = .splash
-    @State private var homeViewModel = HomeViewModel(service: HomeMockMenuService())
+    @State private var homeViewModel = HomeViewModel(service: HomeAPIMenuService())
 
     var body: some View {
         ZStack {
