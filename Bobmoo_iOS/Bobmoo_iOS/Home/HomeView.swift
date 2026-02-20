@@ -6,26 +6,27 @@
 //
 
 import SwiftUI
+import Observation
 
 struct HomeView: View {
-    @State private var ViewModel: HomeViewModel
+    @Bindable var viewModel: HomeViewModel
 
-    init() {
-        _ViewModel = State(initialValue: HomeViewModel(service: HomeMockMenuService()))
+    init(viewModel: HomeViewModel) {
+        self.viewModel = viewModel
     }
        
     var body: some View {
         Group {
-            if ViewModel.isEmptyMenu {
+            if viewModel.isEmptyMenu {
                 VStack(spacing: 0) {
-                    HeaderView(ViewModel: ViewModel)
+                    HeaderView(viewModel: viewModel)
 
                     ScrollView(showsIndicators: false) {
                         EmptyView()
                     }
                     .scrollBounceBehavior(.always)
                     .refreshable {
-                        await ViewModel.load()
+                        await viewModel.load()
                     }
                 }
                 .transition(.opacity)
@@ -34,57 +35,56 @@ struct HomeView: View {
 
                 ScrollView(showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: 0) {
-                        HeaderView(ViewModel: ViewModel)
+                        HeaderView(viewModel: viewModel)
 
-                        ForEach(ViewModel.mealSectionOrder(now: now), id: \.self) { section in
-                            MealSectionCardView(section: section, ViewModel: ViewModel)
+                        ForEach(viewModel.mealSectionOrder(now: now), id: \.self) { section in
+                            MealSectionCardView(section: section, viewModel: viewModel)
                         }
                     }
                 }
                 .transition(.opacity)
             }
         }
-        .animation(.easeInOut(duration: 0.25), value: ViewModel.isEmptyMenu)
+        .animation(.easeInOut(duration: 0.25), value: viewModel.isEmptyMenu)
         .ignoresSafeArea(edges: .top)
         .background(Color.bobmooGray4.ignoresSafeArea())
         .task {
-            if ViewModel.menu == nil {
-                await ViewModel.load()
+            if viewModel.menu == nil {
+                await viewModel.load()
             }
         }
     }
 }
 
 struct HeaderView: View {
-    let ViewModel: HomeViewModel
+    let viewModel: HomeViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                BobmooText(ViewModel.univName, style: .head_b_30)
+                BobmooText(viewModel.univName, style: .head_b_30)
                     .foregroundStyle(Color.bobmooWhite)
 
                 Spacer()
 
-                Button(role: nil, action: {}) {
+                Button(action: {}) {
                     Image(.menu)
                 }
-                .buttonStyle(.plain)
             }
-
-            BobmooCalendarButton(vm: ViewModel)
+            
+            BobmooCalendarButton(vm: viewModel)
         }
         .padding(.horizontal, 25)
         .padding(.top, 70)
         .padding(.bottom, 18)
-        .background(Color(hexRGB: ViewModel.univColor) ?? Color.bobmooBlack)
+        .background(Color(hexRGB: viewModel.univColor) ?? Color.bobmooBlack)
         .BobmooShadow()
     }
 }
 
 struct MealSectionCardView: View {
     let section: HomeViewModel.MealSection
-    let ViewModel: HomeViewModel
+    let viewModel: HomeViewModel
 
     private func priceText(_ value: Int) -> String {
         "\(value)원"
@@ -92,7 +92,7 @@ struct MealSectionCardView: View {
 
     var body: some View {
         let now = Date()
-        let cafeterias = ViewModel.menu?.cafeterias ?? []
+        let cafeterias = viewModel.menu?.cafeterias ?? []
 
         VStack(alignment: .leading, spacing: 0) {
             BobmooText(section.title, style: .head_b_21)
@@ -206,5 +206,5 @@ struct EmptyView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(viewModel: HomeViewModel(service: HomeMockMenuService()))
 }
