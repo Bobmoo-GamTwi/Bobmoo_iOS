@@ -20,7 +20,7 @@ struct BobmooButton: View {
                 .padding(.vertical, 14)
                 .background(
                     RoundedRectangle(cornerRadius: 15, style: .continuous)
-                        .fill(.bobmooGray3)
+                        .fill(.bobmooBlack)
                 )
         }
     }

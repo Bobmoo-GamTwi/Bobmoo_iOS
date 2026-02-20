@@ -20,31 +20,135 @@ final class HomeViewModel {
         case dinner
     }
 
-    var selectedDate: Date = Date()
+    // MARK: - Paging (3-page 무한 스와이프)
+
+    var currentDate: Date = Calendar.current.startOfDay(for: Date()) {
+        didSet {
+            guard !Calendar.current.isDate(currentDate, inSameDayAs: oldValue) else { return }
+            isCalendarPresented = false
+            Task {
+                let base = Calendar.current.startOfDay(for: currentDate)
+                let prev = Calendar.current.date(byAdding: .day, value: -1, to: base)!
+                let next = Calendar.current.date(byAdding: .day, value: 1, to: base)!
+                await loadIfNeeded(date: base)
+                await loadIfNeeded(date: prev)
+                await loadIfNeeded(date: next)
+            }
+        }
+    }
+
+    var selectedTab: Int = 1
+
+    func dateForTab(_ tab: Int) -> Date {
+        let base = Calendar.current.startOfDay(for: currentDate)
+        return Calendar.current.date(byAdding: .day, value: tab - 1, to: base)!
+    }
+
+    func handleTabChange(_ newTab: Int) {
+        guard newTab != 1 else { return }
+
+        let offset = newTab - 1
+        let base = Calendar.current.startOfDay(for: currentDate)
+        selectedTab = 1
+        currentDate = Calendar.current.date(byAdding: .day, value: offset, to: base)!
+    }
+
+    // MARK: - Data
+
+    var menuCache: [String: DailyMenuResponse] = [:]
+    private var loadingDates: Set<String> = []
+    var errorMessage: String?
 
     var univName: String {
-        menu?.school ?? "로딩중"
+        menuCache.values.first?.school ?? "로딩중"
     }
 
     var univColor: String = "005BAC"
-     
-    var menu: DailyMenuResponse?
-    var isLoading = false
-    var errorMessage: String?
 
-    var isEmptyMenu: Bool {
-        !isLoading
-        && errorMessage == nil
-        && (menu?.cafeterias.isEmpty ?? false)
+    func dateKey(_ date: Date) -> String {
+        let c = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        return String(format: "%04d-%02d-%02d", c.year!, c.month!, c.day!)
     }
-    
+
+    func menu(for date: Date) -> DailyMenuResponse? {
+        menuCache[dateKey(date)]
+    }
+
+    func hasMenu(for date: Date) -> Bool {
+        menuCache[dateKey(date)] != nil
+    }
+
+    func isEmptyMenu(for date: Date) -> Bool {
+        guard let cached = menuCache[dateKey(date)] else { return false }
+        return cached.cafeterias.isEmpty
+    }
+
+    var isPreloaded: Bool {
+        !menuCache.isEmpty
+    }
+
+    // MARK: - Init
+
     init(service: HomeMenuService) {
         self.service = service
     }
 
-    func mealSectionOrder(now: Date) -> [MealSection] {
-        let cafeterias = menu?.cafeterias ?? []
+    // MARK: - Loading
 
+    func preload() async {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        let yesterday = cal.date(byAdding: .day, value: -1, to: today)!
+        let tomorrow = cal.date(byAdding: .day, value: 1, to: today)!
+
+        await loadIfNeeded(date: today)
+        await loadIfNeeded(date: yesterday)
+        await loadIfNeeded(date: tomorrow)
+    }
+
+    func loadIfNeeded(date: Date) async {
+        let key = dateKey(date)
+        guard menuCache[key] == nil, !loadingDates.contains(key) else { return }
+
+        loadingDates.insert(key)
+        defer { loadingDates.remove(key) }
+
+        do {
+            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool)
+            withAnimation(.easeInOut(duration: 0.25)) {
+                menuCache[key] = result
+            }
+        } catch {
+            print("[HomeViewModel] loadIfNeeded(\(key)) failed: \(error)")
+        }
+    }
+
+    func reloadDate(_ date: Date) async {
+        let key = dateKey(date)
+        loadingDates.insert(key)
+        defer { loadingDates.remove(key) }
+
+        do {
+            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool)
+            withAnimation(.easeInOut(duration: 0.25)) {
+                menuCache[key] = result
+            }
+        } catch {
+            print("[HomeViewModel] reloadDate(\(key)) failed: \(error)")
+        }
+    }
+
+    // MARK: - Calendar
+
+    var isCalendarPresented: Bool = false
+
+    func didTapCalendar() {
+        isCalendarPresented.toggle()
+    }
+
+    // MARK: - Meal ordering
+
+    func mealSectionOrder(now: Date, cafeterias: [Cafeteria]) -> [MealSection] {
         let breakfastEnded = isMealEnded(now: now, cafeterias: cafeterias, hoursKeyPath: \.breakfast)
         let lunchEnded = isMealEnded(now: now, cafeterias: cafeterias, hoursKeyPath: \.lunch)
         let dinnerEnded = isMealEnded(now: now, cafeterias: cafeterias, hoursKeyPath: \.dinner)
@@ -78,28 +182,6 @@ final class HomeViewModel {
         }
 
         return now > latestEndAt
-    }
-     
-    func load() async {
-        errorMessage = nil
-        isLoading = true
-        defer { isLoading = false }
-        do {
-            let fetchedMenu = try await service.fetchDailyMenu(date: selectedDate, school: "인하대학교")
-            withAnimation(.easeInOut(duration: 0.25)) {
-                menu = fetchedMenu
-            }
-        } catch {
-            withAnimation(.easeInOut(duration: 0.25)) {
-                errorMessage = String(describing: error)
-            }
-        }
-    }
-
-    var isCalendarPresented: Bool = false
-    
-    func didTapCalendar() {
-        isCalendarPresented.toggle()
     }
 }
 

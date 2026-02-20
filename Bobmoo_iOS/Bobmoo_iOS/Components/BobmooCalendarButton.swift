@@ -20,7 +20,7 @@ struct BobmooCalendarButton: View {
     }()
 
     private var formattedDate: String {
-        Self.dateFormatter.string(from: vm.selectedDate)
+        Self.dateFormatter.string(from: vm.currentDate)
     }
      
     var body: some View {
@@ -37,7 +37,7 @@ struct BobmooCalendarButton: View {
         .sheet(isPresented: $vm.isCalendarPresented) {
             DatePicker(
                 "날짜 선택",
-                selection: $vm.selectedDate,
+                selection: $vm.currentDate,
                 displayedComponents: [.date]
             )
             .datePickerStyle(.graphical)
