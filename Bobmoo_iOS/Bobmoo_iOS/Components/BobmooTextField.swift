@@ -38,7 +38,7 @@ struct BobmooTextField: View {
         .padding(.vertical, 11)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(.bobmooDarkGray, lineWidth: 1.5)
+                .stroke(.bobmooGray1, lineWidth: 1.5)
         )
     }
 }
