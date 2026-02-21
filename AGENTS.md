@@ -1,6 +1,7 @@
 # Bobmoo Agent Workflow
 
 이 문서는 에이전트가 작업을 수행할 때 따를 기본 운영 규칙입니다.
+모든 네이밍/포맷/Priority/Label/Due Date 상세는 `.claude/skills/shared/conventions.md` 참조.
 
 ## Core Principle
 
@@ -10,92 +11,33 @@
 
 ## Required Skills
 
-- Linear 이슈 생성 시 `linear-issue-policy`를 따른다.
-- Linear + GitHub 동시 이슈 생성 시 `linear-github-issue-sync`를 따른다.
-- Git 브랜치/커밋/PR 작업 시 `git-master`를 따른다.
-  - Git 컨벤션 기준 문서: `/git-master/SKILL.md`
-- 두 스킬에서 정의한 제목/본문/라벨/우선순위/기한 정책을 우선 적용한다.
+| 작업 | 스킬 |
+|------|------|
+| Linear 이슈 생성 | `linear-issue-policy` |
+| Linear + GitHub 동시 이슈 생성 | `linear-github-issue-sync` |
+| Git 브랜치/커밋/PR | `git-master` |
+
+스킬에서 정의한 제목/본문/라벨/우선순위/기한 정책을 우선 적용한다.
 
 ## Task Unit Flow (Mandatory)
 
 1. 작업 분석 후 단위를 쪼갠다 (각 단위는 명확한 완료 조건 포함).
-2. 이슈를 생성한다.
-   - `작업 시작`, `작업 시작하자`, `시작하자` 트리거가 들어오면 반드시 **Linear + GitHub 동시 생성**을 기본으로 한다.
-   - `작업 준비`, `작업 준비하자`, `준비하자`처럼 준비 뉘앙스의 트리거도 동일하게 **Linear + GitHub 동시 생성**을 기본으로 한다.
-   - 단, 사용자가 이미 존재하는 Linear 이슈(예: `BOB-123`)를 기준으로 `작업 준비`를 요청하면 새 Linear 이슈를 만들지 않는다.
-     - 이 경우 누락된 GitHub 이슈를 생성/연결하고, 해당 이슈 키 기반 브랜치를 준비한다.
-   - 두 이슈는 동일 제목/본문을 사용하고 상호 링크를 남긴다.
-3. 이슈 키 기반 브랜치를 만든다.
-   - 브랜치 형식: `/git-master/SKILL.md`에서 정의한 브랜치 네이밍을 따른다.
-   - 예시: `feature/color-icon-assets-extension-setting`
+2. 이슈를 생성한다 → `linear-github-issue-sync` 적용.
+3. 이슈 키 기반 브랜치를 만든다 → `git-master` 브랜치 컨벤션 적용.
 4. 구현한다.
-   - 구현을 시작하기 직전에 Linear 이슈 상태를 반드시 `In Progress`로 변경한다.
+   - 구현 직전 Linear 이슈 상태를 `In Progress`로 변경.
    - 단위 범위를 벗어난 리팩토링은 하지 않는다.
-   - 변경 후 빌드/테스트/진단으로 검증한다.
-5. 커밋한다.
-   - 커밋은 작고 의미 단위로 나눈다.
-   - 커밋 메시지는 변경 목적이 드러나야 한다.
-   - 커밋 직전 `git-master` 규칙으로 메시지 형식을 검증한다.
-6. PR을 생성한다.
-   - 제목/본문은 PR 컨벤션 섹션(아래)과 템플릿을 따른다.
-   - PR 생성 직후 Linear 이슈의 PR 리소스(연결 링크)에 해당 GitHub PR을 자동 연동한다.
-
-## Commit Message Protocol (Mandatory)
-
-- 형식: `#이슈번호 커밋내용`
-- 이슈번호 없는 커밋은 금지한다.
-- 커밋내용은 작업 목적 중심으로 작성한다. (`수정`, `반영`, `전환`, `추가` 등)
-- 커밋 메시지는 한국어 중심으로 작성하고, 기술 용어는 필요할 때만 영어를 혼용한다.
-- 영어-only 커밋 메시지는 사용하지 않는다.
-- 예시: `#13 BobmooText 스타일 전환 및 lineHeight 적용`
-- 자동 생성 서명/광고성 문구를 커밋 메시지에 포함하지 않는다.
-  - 금지 예시: `Pasted Ultraworked with [Sisyphus](...)`, `Co-authored-by: Sisyphus <clio-agent@sisyphuslabs.ai>`
-  - 원칙: 실제 공동 작업자가 아닌 에이전트/봇 서명, 도구 홍보 문구는 항상 제거한다.
-- 커밋 실행 전 아래 체크를 반드시 통과한다.
-  1) 현재 브랜치에서 이슈번호를 확인할 수 있는가 (`prefix/#123-...`)
-  2) 커밋 메시지가 `#123 ...` 패턴을 만족하는가
-  3) 메시지가 현재 staged 변경 범위와 정확히 일치하는가
-- 위 3개 중 하나라도 실패하면 커밋을 만들지 않고 먼저 사용자에게 정정안을 제시한다.
-
-## Issue Conventions
-
-- 제목: `[Prefix] <what to do>`
-- 제목 끝에 `하기`를 붙이지 않는다.
-- 예시: `[Refactor] BobmooText 스타일 전환`
-- Prefix 후보: `Feature`, `Bug`, `Refactor`, `Chore`, `Docs`, `Test`
-- 본문: `.github/ISSUE_TEMPLATE/issue_template.md` 구조를 따른다.
-
-## PR Conventions
-
-- 하나의 PR은 하나의 작업 단위를 해결한다.
-- 제목: `[Prefix] <what to do>` 형식을 따른다.
-- 제목 끝에 `하기`를 붙이지 않는다.
-- 예시: `[Refactor] BobmooText 스타일 전환`
-- Prefix 후보: `Feature`, `Bug`, `Refactor`, `Chore`, `Docs`, `Test`
-- 본문: `.github/PULL_REQUEST_TEMPLATE.md` 구조를 그대로 따른다.
-- PR 본문 필수 항목:
-  - 배경/목표
-  - 구현 의도/결정 이유
-  - 변경 사항
-  - 테스트/검증 결과
-  - Linear/GitHub 이슈 링크
-- 구현 의도가 있는 변경은 `구현 의도/결정 이유`에 반드시 기록한다.
-- `참고자료`에는 템플릿 경로 자체를 적지 않고, 실제 외부 참고자료만 작성한다.
-- `주요 코드 설명`에는 변경한 코드의 실제 사용 방법(예시 코드/호출 방식)을 포함한다.
-- PR 생성 시 기본 assignee는 작성자 본인(`@me`)으로 지정한다.
-- PR 생성 시 제목/변경 성격에 맞는 라벨을 최소 1개 이상 지정한다.
-- PR 생성 후 Linear 이슈의 PR 리소스에 해당 PR 링크가 자동으로 연결되었는지 확인한다. 누락 시 즉시 수동으로 보완한다.
+   - 변경 후 빌드/테스트/진단으로 검증.
+5. 커밋한다 → `git-master` 커밋 컨벤션 적용.
+6. PR을 생성한다 → `git-master` PR 컨벤션 적용.
 
 ## Guardrails
 
 - 이슈 없이 코드 작업을 시작하지 않는다 (긴급 hotfix 제외).
 - 브랜치 없이 직접 기본 브랜치에서 작업하지 않는다.
 - 검증 없이 PR을 올리지 않는다.
-- PR 제목/본문 컨벤션(`.github/PULL_REQUEST_TEMPLATE.md`, `[Prefix] ...`) 미준수 상태로는 PR을 올리지 않는다.
-- assignee/label 누락 상태로는 PR을 올리지 않는다.
 - Linear/GitHub 이슈 2종 생성 또는 상호 링크 확인 누락 상태로는 PR을 올리지 않는다.
 - 관련 없는 변경을 함께 섞지 않는다.
-- 커밋 메시지 컨벤션(`#이슈번호 커밋내용`) 미준수 상태로는 커밋하지 않는다.
 - 사용자의 명시적 허락 없이 GitHub remote로 `push`하지 않는다.
 
 ## SwiftUI Asset Style Convention (Mandatory)
@@ -121,20 +63,18 @@ Button(action: {
 
 ## Start Trigger Protocol (Mandatory)
 
-- 사용자가 `작업 시작`, `작업 시작하자`, `시작하자`처럼 구현 시작 의도를 말하면 아래 순서를 즉시 수행한다.
-- 사용자가 `작업 준비`, `작업 준비하자`, `준비하자`처럼 준비 의도를 말해도 아래 순서를 동일하게 수행한다.
-  1) `linear-issue-policy`를 적용해 Linear 이슈 생성
-  2) `linear-github-issue-sync`를 적용해 GitHub 이슈 동시 생성 및 상호 링크 확인
-  3) `git-master` 규칙으로 이슈 키 기반 브랜치 생성 후 해당 브랜치에서만 작업 시작
-- 예외: 사용자가 기존 Linear 이슈 키(예: `BOB-123`)를 명시하며 `작업 준비`를 요청한 경우
-  1) 해당 Linear 이슈를 재사용한다 (새 Linear 이슈 생성 금지)
-  2) GitHub 이슈가 없으면 생성하고, 있으면 링크 상태만 검증한다
-  3) `git-master` 규칙으로 해당 이슈 키 기반 브랜치를 생성/전환한다
-- `작업 시작`/`작업 준비` 트리거만으로는 구현(코드 생성/수정)을 시작하지 않는다.
-  - 이 단계의 기본 동작은 **이슈 2종 + 브랜치 준비 완료까지**로 제한한다.
-  - 구현에 착수할 때는 먼저 해당 Linear 이슈 상태를 `In Progress`로 변경한 뒤 진행한다.
-  - 구현은 사용자가 `구현 시작`, `만들어`, `수정해` 등 명시적 구현 지시를 준 뒤에만 진행한다.
-- 위 3단계 중 하나라도 실패하면 구현을 시작하지 않고, 실패 지점과 재시도 계획을 먼저 사용자에게 보고한다.
-- 이슈 생성 완료 증거로 Linear 이슈 URL과 GitHub 이슈 URL을 모두 확보한 뒤 다음 단계로 진행한다.
-- 다음 단계(구현/수정)는 3단계 완료가 확인된 뒤에만 진행한다.
-- 구현 완료 후에도 사용자의 명시적 허락이 있기 전에는 `push`를 수행하지 않는다.
+- `작업 시작`, `작업 시작하자`, `시작하자` 또는 `작업 준비`, `작업 준비하자`, `준비하자` 트리거 시:
+  1) `linear-issue-policy` 적용해 Linear 이슈 생성
+  2) `linear-github-issue-sync` 적용해 GitHub 이슈 동시 생성 및 상호 링크 확인
+  3) `git-master` 규칙으로 이슈 키 기반 브랜치 생성
+- 예외: 기존 Linear 이슈 키(예: `BOB-123`) 명시 시
+  1) 해당 Linear 이슈 재사용 (새 이슈 생성 금지)
+  2) GitHub 이슈 없으면 생성, 있으면 링크 검증
+  3) 해당 이슈 키 기반 브랜치 생성/전환
+- `작업 시작`/`작업 준비` 트리거만으로는 구현을 시작하지 않는다.
+  - 기본 동작은 **이슈 2종 + 브랜치 준비 완료까지**로 제한.
+  - 구현은 `구현 시작`, `만들어`, `수정해` 등 명시적 구현 지시 후에만 진행.
+  - 구현 착수 시 Linear 이슈 상태를 `In Progress`로 변경.
+- 3단계 중 하나라도 실패하면 실패 지점과 재시도 계획을 먼저 보고한다.
+- Linear/GitHub 이슈 URL 모두 확보 후 다음 단계 진행.
+- 구현 완료 후에도 사용자 명시 허락 전 `push` 금지.

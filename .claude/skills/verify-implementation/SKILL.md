@@ -1,8 +1,6 @@
 ---
 name: verify-implementation
-description: 프로젝트의 모든 verify 스킬을 순차 실행하여 통합 검증 보고서를 생성합니다. 기능 구현 후, PR 전, 코드 리뷰 시 사용.
-disable-model-invocation: true
-argument-hint: "[선택사항: 특정 verify 스킬 이름]"
+description: 프로젝트의 모든 verify 스킬을 순차 실행하여 통합 검증 보고서를 생성합니다. 기능 구현 후, PR 전, 코드 리뷰 시 사용. "검증해줘", "verify", "구현 점검" 등 요청 시 적용.
 ---
 
 # 구현 검증
@@ -27,13 +25,9 @@ argument-hint: "[선택사항: 특정 verify 스킬 이름]"
 
 이 스킬이 순차 실행하는 검증 스킬 목록입니다. `/manage-skills`가 스킬을 생성/삭제할 때 이 목록을 자동 업데이트합니다.
 
-(아직 등록된 검증 스킬이 없습니다)
-
-<!-- 스킬이 추가되면 아래 형식으로 등록:
 | # | 스킬 | 설명 |
 |---|------|------|
-| 1 | `verify-example` | 예시 검증 설명 |
--->
+| 1 | `verify-swiftui-assets` | SwiftUI 에셋 사용 규칙 검증 (타입 세이프 Image/Color 접근) |
 
 ## 워크플로우
 
