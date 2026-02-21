@@ -1,125 +1,67 @@
 ---
 name: linear-github-issue-sync
-description: Create Linear and GitHub issues together with the same core content, shared convention, and cross-links.
+description: Linear과 GitHub 이슈를 동시에 생성하고 동일 제목/본문/상호 링크를 보장한다. "작업 시작", "작업 준비", "이슈 동기화" 등 요청 시 적용.
 ---
 
 # Linear + GitHub Issue Sync
 
 ## When to Use
 
-- User asks to create a Linear issue and GitHub issue at the same time.
-- User asks to keep Linear/GitHub issue content synchronized at creation time.
-- User asks `작업 준비` for an existing Linear issue key (for example `BOB-123`) and needs missing GitHub issue + links prepared.
+- Linear + GitHub 이슈 동시 생성 요청 시
+- `작업 시작` / `작업 준비` 트리거 시 (AGENTS.md Start Trigger Protocol에서 호출)
+- 기존 Linear 이슈 키(예: `BOB-123`)로 `작업 준비` 시 → GitHub 이슈 보완 + 링크 검증
 
-## Required Convention
+## Convention
 
-### Title
+제목/바디/Priority/Label/Due Date 규칙은 모두 [shared/conventions.md](../shared/conventions.md) 참조.
 
-- Always normalize to: `[Prefix] <what to do>`
-- Prefix set: `Feature`, `Bug`, `Refactor`, `Chore`, `Docs`, `Test`
-
-### Body Template
-
-Use this base template for both Linear and GitHub issue bodies:
-
-```markdown
-## 📝 작업 페이지 캡쳐
-|    페이지    |   캡쳐   |
-| :-------------: | :----------: |
-| 피그마 | <img src = "" width ="250"> 
-
-## ✔️ To-Do
-- [ ] 세부적으로 적어주세요
-```
-
-If the user provides details/checklist, replace the default To-Do item with concrete items and append extra details below.
-
-## Linear Defaults (must apply)
+## Linear Defaults
 
 - Assignee: `me`
 - State: `Todo`
-- Priority: infer automatically, but always set explicit numeric value (`1|2|3|4`)
-- Labels: infer automatically, but always set at least one explicit label
-- Due date:
-  - user-specified date if provided
-  - otherwise today (`YYYY-MM-DD`, user timezone)
+- Priority: 추론 후 명시적 1~4 값 설정
+- Labels: 추론 후 최소 1개 설정
+- Due Date: 사용자 지정 또는 오늘
 
-## GitHub Defaults (must apply)
+## GitHub Defaults
 
-- Repository: use current repo by default (`gh repo view`), unless user specifies another repo.
-- Labels: map from inferred category and apply at least one label. If missing, create label first then apply.
-- Assignee: assign `@me` when permission/repo policy allows; if not, proceed without failing.
-- Milestone/project: set only when user explicitly asks.
+- Repository: 현재 repo 기본 (`gh repo view`)
+- Labels: 추론 후 최소 1개. 없으면 생성 후 적용.
+- Assignee: `@me` (권한 허용 시)
+- Milestone/project: 사용자 명시 요청 시만 설정
 
 ## Sync Execution Flow
 
-1. Normalize title to convention.
-2. Build canonical body using template.
-3. Create Linear issue first with Linear defaults.
-4. Create GitHub issue with same title/body.
-5. Cross-link both sides:
-   - Add `GitHub: <url>` to Linear issue description.
-   - Add `Linear: <url>` to GitHub issue body (or as first comment if body update is restricted).
-6. Return both identifiers/URLs in one response.
-7. Do not proceed to implementation/PR workflow until both URLs are confirmed and visible.
+1. 제목을 `[Prefix] <작업내용>` 형식으로 정규화
+2. 바디 템플릿으로 canonical body 구성
+3. Linear 이슈 먼저 생성 (Linear Defaults 적용)
+4. GitHub 이슈 동일 제목/바디로 생성
+5. 양방향 크로스 링크:
+   - Linear description에 `GitHub: <url>` 추가
+   - GitHub body에 `Linear: <url>` 추가 (body 수정 불가 시 첫 comment)
+6. 양쪽 identifier/URL 한 번에 반환
+7. 양쪽 URL 확인 전까지 구현/PR 진행 금지
 
-## Existing Linear Issue Preparation Flow (Mandatory)
+## Existing Issue Preparation Flow
 
-If user explicitly references an existing Linear issue key and asks `작업 준비`:
+기존 Linear 이슈 키 기반 `작업 준비` 시:
 
-1. Reuse the referenced Linear issue. Do not create a new Linear issue.
-2. Check whether a linked GitHub issue already exists.
-3. If missing, create a GitHub issue using the Linear issue's normalized title/body.
-4. Ensure cross-links on both sides:
-   - Linear description or attachments must contain GitHub issue URL.
-   - GitHub body/comment must contain Linear issue URL.
-5. Return readiness result with:
-   - Linear identifier/URL
-   - GitHub issue number/URL (existing or newly created)
-   - Link sync status (`verified` or `created and linked`)
-
-## Priority and Label Heuristic
-
-Priority mapping (Linear):
-
-- `1 Urgent`: outage, security incident, data loss, release blocker
-- `2 High`: major user impact, deadline-critical
-- `3 Medium`: normal task (default)
-- `4 Low`: cleanup/nice-to-have
-
-Label mapping candidates (both systems when available):
-
-- bug/fix/error/crash -> `bug`
-- feature/implement/add -> `feature`
-- refactor/cleanup -> `refactor`
-- test/qa -> `test`
-- docs/readme -> `documentation`
-- perf/slow -> `performance`
-- security/auth/vulnerability -> `security`
-
-Fallbacks when inference is weak:
-
-- Priority fallback: `3 (Medium)`
-- Label fallback: `Chore` (if unavailable, `Feature`)
+1. 해당 Linear 이슈 재사용 (새 이슈 생성 금지)
+2. 연결된 GitHub 이슈 존재 여부 확인
+3. 없으면 Linear 이슈의 정규화된 제목/바디로 GitHub 이슈 생성
+4. 양방향 크로스 링크 보장
+5. 반환: Linear identifier/URL, GitHub issue number/URL, 링크 동기화 상태
 
 ## Failure Handling
 
-- If Linear succeeds and GitHub fails:
-  - keep Linear issue open
-  - comment on Linear with `GitHub creation failed` reason
-  - report partial success clearly
-  - block implementation/PR start until GitHub issue is created and cross-linked
-- If GitHub succeeds and Linear fails:
-  - comment on GitHub with `Linear creation failed` reason
-  - report partial success clearly
-  - block implementation/PR start until Linear issue is created and cross-linked
-- Never silently fail one side.
-- Never omit priority/labels silently. If setting fails, report explicit reason and retry once with fallback values.
+- **Linear 성공 + GitHub 실패**: Linear 유지, Linear에 실패 사유 코멘트, partial success 보고, 구현 차단
+- **GitHub 성공 + Linear 실패**: GitHub에 실패 사유 코멘트, partial success 보고, 구현 차단
+- 한쪽 실패를 조용히 넘기지 않는다.
+- Priority/Labels 설정 실패 시 사유 명시 후 폴백값으로 1회 재시도.
 
 ## Response Format
 
-Always return:
-
+항상 반환:
 - Linear: identifier, URL, state, assignee, priority, labels, due date
 - GitHub: issue number, URL, assignee, labels
-- Sync status: `full success` or `partial success` with failure reason
+- Sync status: `full success` 또는 `partial success` + 실패 사유
