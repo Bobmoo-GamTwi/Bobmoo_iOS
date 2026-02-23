@@ -63,7 +63,7 @@ final class HomeViewModel {
         menuCache.values.first?.school ?? "로딩중"
     }
 
-    var univColor: String = "005BAC"
+    var univColor: String = AppConfig.selectedSchoolColor
 
     func dateKey(_ date: Date) -> String {
         let c = Calendar.current.dateComponents([.year, .month, .day], from: date)
@@ -114,7 +114,7 @@ final class HomeViewModel {
         defer { loadingDates.remove(key) }
 
         do {
-            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool)
+            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool ?? "")
             withAnimation(.easeInOut(duration: 0.25)) {
                 menuCache[key] = result
             }
@@ -129,7 +129,7 @@ final class HomeViewModel {
         defer { loadingDates.remove(key) }
 
         do {
-            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool)
+            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool ?? "")
             withAnimation(.easeInOut(duration: 0.25)) {
                 menuCache[key] = result
             }

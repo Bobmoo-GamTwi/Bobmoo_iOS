@@ -8,31 +8,47 @@
 import SwiftUI
 
 struct SearchView: View {
-    @State var query: String = ""
-    @State var searchAmount: Int = 2
-     
+    @Bindable var viewModel: SearchViewModel
+    var didComplete: () -> Void
+
     var body: some View {
         VStack(spacing: 0) {
-            SearchHeaderView(query: $query)
-            
-            SearchResultView(searchAmount: $searchAmount)
-                        
+            SearchHeaderView(query: $viewModel.query)
+
+            SearchResultView(
+                schools: viewModel.schools,
+                searchAmount: viewModel.searchAmount,
+                selectedSchoolId: viewModel.selectedSchoolId,
+                onSelect: { school in
+                    viewModel.selectSchool(school)
+                }
+            )
+
             Spacer()
+
+            BobmooButton(label: "선택완료") {
+                didComplete()
+            }
+            .padding(.horizontal, 40)
+            .padding(.bottom, 12)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.bobmooGray4.ignoresSafeArea())
+        .task {
+            await viewModel.fetchSchools()
+        }
     }
 }
 
 struct SearchHeaderView: View {
     @Binding var query: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             BobmooText("학교찾기", style: .head_b_30)
                 .padding(.top, 25)
                 .padding(.leading, 26)
-            
+
             BobmooTextField(query: $query) { _ in }
                 .padding(.top, 14)
                 .padding(.horizontal, 17)
@@ -42,18 +58,42 @@ struct SearchHeaderView: View {
 }
 
 struct SearchResultView: View {
-    @Binding var searchAmount: Int
-    
+    let schools: [School]
+    let searchAmount: Int
+    let selectedSchoolId: Int?
+    let onSelect: (School) -> Void
+
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 0) {
-                BobmooText("검색 결과 \(searchAmount)", style: .body_b_15)
-                    .padding(.leading, 18)
-                    .padding(.top, 18)
-                
-                Spacer()
+        VStack(alignment: .leading, spacing: 0) {
+            BobmooText("검색 결과 \(searchAmount)", style: .body_b_15)
+                .padding(.leading, 18)
+                .padding(.top, 18)
+
+            ForEach(schools) { school in
+                Button {
+                    onSelect(school)
+                } label: {
+                    HStack(spacing: 0) {
+                        BobmooText(school.schoolName, style: .body_b_15)
+
+                        Spacer()
+                    }
+                    .overlay(alignment: .trailing) {
+                        if selectedSchoolId == school.schoolId {
+                            Image(.check)
+                                .padding(.trailing, 18)
+                        }
+                    }
+                    .padding(.leading, 21)
+                    .padding(.top, 26)
+                }
+                .buttonStyle(.plain)
+
+                Divider()
+                    .padding(.top, 22)
+                    .padding(.horizontal, 18)
+                    .foregroundStyle(.bobmooGray5)
             }
-            
         }
         .padding(.bottom, 18)
         .background(
@@ -67,5 +107,5 @@ struct SearchResultView: View {
 }
 
 #Preview {
-    SearchView()
+    SearchView(viewModel: SearchViewModel(service: SearchAPISchoolService())) {}
 }

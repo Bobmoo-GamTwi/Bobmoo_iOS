@@ -1,0 +1,46 @@
+//
+//  SearchViewModel.swift
+//  Bobmoo_iOS
+//
+//  Created by 송성용 on 2/23/26.
+//
+
+import Foundation
+import SwiftUI
+import Observation
+
+@MainActor
+@Observable
+final class SearchViewModel {
+    private let service: SearchSchoolService
+
+    var schools: [School] = []
+    var query: String = ""
+    var selectedSchoolId: Int?
+    var errorMessage: String?
+
+    var searchAmount: Int {
+        schools.count
+    }
+
+    init(service: SearchSchoolService) {
+        self.service = service
+    }
+
+    func fetchSchools() async {
+        do {
+            let response = try await service.fetchSchools()
+            withAnimation(.easeInOut(duration: 0.25)) {
+                schools = response.data
+            }
+        } catch {
+            print("[SearchViewModel] fetchSchools failed: \(error)")
+        }
+    }
+
+    func selectSchool(_ school: School) {
+        selectedSchoolId = school.schoolId
+        AppConfig.selectedSchool = school.schoolName
+        AppConfig.selectedSchoolColor = school.schoolColor
+    }
+}
