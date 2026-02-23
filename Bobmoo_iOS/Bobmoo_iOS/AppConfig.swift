@@ -17,14 +17,24 @@ enum AppConfig {
     }
 
     private static let selectedSchoolKey = "selectedSchool"
-    private static let defaultSchool = "inha"
+    private static let selectedSchoolColorKey = "selectedSchoolColor"
+    private static let defaultSchoolColor = "005BAC"
 
-    static var selectedSchool: String {
+    static var selectedSchool: String? {
         get {
-            UserDefaults.standard.string(forKey: selectedSchoolKey) ?? defaultSchool
+            UserDefaults.standard.string(forKey: selectedSchoolKey)
         }
         set {
             UserDefaults.standard.set(newValue, forKey: selectedSchoolKey)
+        }
+    }
+
+    static var selectedSchoolColor: String {
+        get {
+            UserDefaults.standard.string(forKey: selectedSchoolColorKey) ?? defaultSchoolColor
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: selectedSchoolColorKey)
         }
     }
 }

@@ -19,8 +19,9 @@ struct BobmooTextField: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            TextField("검색어를 입력해주세요.", text: $query)
-                .bobmooFont(.body_m_15)
+            TextField("학교를 검색해 주세요", text: $query)
+                .bobmooFont(.body_sb_15)
+                .foregroundStyle(.bobmooGray3)
                 .submitLabel(.search)
                 .onSubmit(submitSearch)
                 .padding(.leading, 17)
@@ -36,9 +37,9 @@ struct BobmooTextField: View {
             .padding(.trailing, 14)
         }
         .padding(.vertical, 11)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(.bobmooGray1, lineWidth: 1.5)
+        .background (
+            RoundedRectangle(cornerRadius: 15)
+                .fill(.bobmooGray1)
         )
     }
 }

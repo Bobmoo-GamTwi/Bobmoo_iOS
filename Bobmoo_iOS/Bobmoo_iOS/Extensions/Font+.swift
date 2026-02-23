@@ -28,6 +28,8 @@ enum BobmooFontName {
     case head_b_21
     case title_sb_30
     case body_sb_18
+    case body_b_17
+    case body_b_15
     case body_sb_15
     case body_m_15
     case body_m_11
@@ -40,7 +42,7 @@ enum BobmooFontName {
 
     var weight: Font.PretendardWeight {
         switch self {
-        case .head_b_48, .head_b_30, .head_b_21:
+        case .head_b_48, .head_b_30, .head_b_21, .body_b_17, .body_b_15:
             return .bold
         case .body_m_15, .body_m_11:
             return .medium
@@ -63,6 +65,10 @@ enum BobmooFontName {
             return 18
         case .body_sb_18:
             return 18
+        case .body_b_17:
+            return 17
+        case .body_b_15:
+            return 15
         case .body_sb_15:
             return 15
         case .body_m_15:
@@ -88,6 +94,8 @@ enum BobmooFontName {
             return 2
         case .head_b_21, .title_sb_30, .body_sb_18:
             return 5
+        case .body_b_17, .body_b_15:
+            return 4
         case .body_m_15, .body_m_11:
             return 4
         case .body_sb_15, .body_sb_11, .body_sb_12, .body_r_15, .caption_r_15:
@@ -142,12 +150,12 @@ private struct BobmooTypographyModifier: ViewModifier {
                 .font(BobmooFont(name))
                 .tracking(BobmooTracking(name))
                 .lineSpacing(BobmooLineSpacing(name))
-                .frame(minHeight: BobmooLineHeight(name), alignment: .center)
+                .frame(minHeight: BobmooLineHeight(name), alignment: .leading)
         } else {
             content
                 .font(BobmooFont(name))
                 .tracking(BobmooTracking(name))
-                .frame(height: BobmooLineHeight(name), alignment: .center)
+                .frame(height: BobmooLineHeight(name), alignment: .leading)
         }
     }
 }
