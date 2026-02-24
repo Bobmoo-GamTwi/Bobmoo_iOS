@@ -45,6 +45,13 @@ struct HomeView: View {
         }
         .ignoresSafeArea(edges: .top)
         .background(Color.bobmooGray4.ignoresSafeArea())
+        .onChange(of: viewModel.currentDate) { oldValue, newValue in
+            guard !Calendar.current.isDate(newValue, inSameDayAs: oldValue) else { return }
+            viewModel.dateDidChange()
+        }
+        .task(id: viewModel.currentDate) {
+            await viewModel.preloadAroundCurrentDate()
+        }
     }
 }
 

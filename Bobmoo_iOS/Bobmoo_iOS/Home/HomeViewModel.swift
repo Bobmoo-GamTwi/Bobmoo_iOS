@@ -23,20 +23,7 @@ final class HomeViewModel {
 
     // MARK: - Paging (3-page 무한 스와이프)
 
-    var currentDate: Date = Calendar.current.startOfDay(for: Date()) {
-        didSet {
-            guard !Calendar.current.isDate(currentDate, inSameDayAs: oldValue) else { return }
-            isCalendarPresented = false
-            Task {
-                let base = Calendar.current.startOfDay(for: currentDate)
-                let prev = Calendar.current.date(byAdding: .day, value: -1, to: base)!
-                let next = Calendar.current.date(byAdding: .day, value: 1, to: base)!
-                await loadIfNeeded(date: base)
-                await loadIfNeeded(date: prev)
-                await loadIfNeeded(date: next)
-            }
-        }
-    }
+    var currentDate: Date = Calendar.current.startOfDay(for: Date())
 
     var selectedTab: Int = 1
 
@@ -158,6 +145,21 @@ final class HomeViewModel {
         Task {
             await preload()
         }
+    }
+
+    // MARK: - Date Change
+
+    func dateDidChange() {
+        isCalendarPresented = false
+    }
+
+    func preloadAroundCurrentDate() async {
+        let base = Calendar.current.startOfDay(for: currentDate)
+        let prev = Calendar.current.date(byAdding: .day, value: -1, to: base)!
+        let next = Calendar.current.date(byAdding: .day, value: 1, to: base)!
+        await loadIfNeeded(date: base)
+        await loadIfNeeded(date: prev)
+        await loadIfNeeded(date: next)
     }
     // MARK: - Meal ordering
 
