@@ -96,6 +96,7 @@ final class HomeViewModel {
     // MARK: - Loading
 
     func preload() async {
+        errorMessage = nil
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
         let yesterday = cal.date(byAdding: .day, value: -1, to: today)!
@@ -119,6 +120,10 @@ final class HomeViewModel {
                 menuCache[key] = result
             }
         } catch {
+            let school = AppConfig.selectedSchool ?? ""
+            if !school.isEmpty {
+                errorMessage = error.localizedDescription
+            }
             print("[HomeViewModel] loadIfNeeded(\(key)) failed: \(error)")
         }
     }
@@ -134,6 +139,7 @@ final class HomeViewModel {
                 menuCache[key] = result
             }
         } catch {
+            errorMessage = error.localizedDescription
             print("[HomeViewModel] reloadDate(\(key)) failed: \(error)")
         }
     }
