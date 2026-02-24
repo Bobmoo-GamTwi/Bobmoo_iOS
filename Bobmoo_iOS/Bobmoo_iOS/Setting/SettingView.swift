@@ -59,6 +59,7 @@ struct SettingHeaderView: View {
 }
 
 struct UnivSettingView: View {
+    @Environment(AppSettings.self) private var settings
     var onTap: () -> Void
     
     var body: some View {
@@ -71,7 +72,7 @@ struct UnivSettingView: View {
                         .padding(.top, 13)
                     
                     HStack(spacing: 0) {
-                        BobmooText(AppConfig.selectedSchool ?? "학교를 선택해주세요", style: .body_m_15)
+                        BobmooText(settings.selectedSchool ?? "학교를 선택해주세요", style: .body_m_15)
                             .padding(.leading, 18)
                             .padding(.top, 8)
                         
@@ -96,7 +97,7 @@ struct UnivSettingView: View {
 }
 
 struct WidgetSettingView: View {
-    @State private var selectedCafeteria: String = AppConfig.selectedCafeteria
+    @Environment(AppSettings.self) private var settings
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -110,23 +111,20 @@ struct WidgetSettingView: View {
                 .padding(.top, 8)
             
             HStack(spacing: 0) {
-                BobmooChip(label: "학생식당", isSelected: selectedCafeteria == "학생식당") {
-                    selectedCafeteria = "학생식당"
-                    AppConfig.selectedCafeteria = "학생식당"
+                BobmooChip(label: "학생식당", isSelected: settings.selectedCafeteria == "학생식당") {
+                    settings.selectedCafeteria = "학생식당"
                 }
                 .padding(.leading, 18)
                 .padding(.top, 8)
 
-                BobmooChip(label: "교직원식당", isSelected: selectedCafeteria == "교직원식당") {
-                    selectedCafeteria = "교직원식당"
-                    AppConfig.selectedCafeteria = "교직원식당"
+                BobmooChip(label: "교직원식당", isSelected: settings.selectedCafeteria == "교직원식당") {
+                    settings.selectedCafeteria = "교직원식당"
                 }
                 .padding(.leading, 8)
                 .padding(.top, 8)
                 
-                BobmooChip(label: "생활관식당", isSelected: selectedCafeteria == "생활관식당") {
-                    selectedCafeteria = "생활관식당"
-                    AppConfig.selectedCafeteria = "생활관식당"
+                BobmooChip(label: "생활관식당", isSelected: settings.selectedCafeteria == "생활관식당") {
+                    settings.selectedCafeteria = "생활관식당"
                 }
                 .padding(.leading, 8)
                 .padding(.top, 8)
@@ -177,5 +175,7 @@ struct AppVerView: View {
 }
 
 #Preview {
+    let settings = AppSettings()
     SettingView(onBack: {}, onSearchSchool: {})
+        .environment(settings)
 }

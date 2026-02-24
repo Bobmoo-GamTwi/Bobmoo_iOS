@@ -54,5 +54,5 @@ struct SplashView: View {
 }
 
 #Preview {
-    SplashView(homeViewModel: HomeViewModel(service: HomeMockMenuService())) {}
+    SplashView(homeViewModel: HomeViewModel(service: HomeMockMenuService(), settings: AppSettings())) {}
 }

@@ -115,5 +115,5 @@ struct SearchResultView: View {
 }
 
 #Preview {
-    SearchView(viewModel: SearchViewModel(service: SearchAPISchoolService())) {}
+    SearchView(viewModel: SearchViewModel(service: SearchAPISchoolService(), settings: AppSettings())) {}
 }

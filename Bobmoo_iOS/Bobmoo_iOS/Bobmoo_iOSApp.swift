@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Bobmoo_iOSApp: App {
+    @State private var settings = AppSettings()
+
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(settings: settings)
+                .environment(settings)
         }
     }
 }

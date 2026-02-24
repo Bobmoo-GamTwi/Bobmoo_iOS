@@ -30,7 +30,7 @@ struct SearchAPISchoolService: SearchSchoolService {
     }
 
     private func buildURL() throws -> URL {
-        var components = URLComponents(url: AppConfig.baseURL, resolvingAgainstBaseURL: false)
+        var components = URLComponents(url: APIConfig.baseURL, resolvingAgainstBaseURL: false)
         let basePath = components?.path ?? ""
         components?.path = basePath + "/schools"
 
