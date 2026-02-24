@@ -247,5 +247,5 @@ struct EmptyView: View {
 }
 
 #Preview {
-    HomeView(viewModel: HomeViewModel(service: HomeMockMenuService()), onSetting: {})
+    HomeView(viewModel: HomeViewModel(service: HomeMockMenuService(), settings: AppSettings()), onSetting: {})
 }

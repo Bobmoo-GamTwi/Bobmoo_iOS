@@ -13,6 +13,7 @@ import Observation
 @Observable
 final class HomeViewModel {
     private let service: HomeMenuService
+    private let settings: AppSettings
 
     enum MealSection: CaseIterable, Hashable {
         case breakfast
@@ -63,7 +64,7 @@ final class HomeViewModel {
         menuCache.values.first?.school ?? "로딩중"
     }
 
-    var univColor: String = AppConfig.selectedSchoolColor
+    var univColor: String { settings.selectedSchoolColor }
 
     func dateKey(_ date: Date) -> String {
         let c = Calendar.current.dateComponents([.year, .month, .day], from: date)
@@ -89,8 +90,9 @@ final class HomeViewModel {
 
     // MARK: - Init
 
-    init(service: HomeMenuService) {
+    init(service: HomeMenuService, settings: AppSettings) {
         self.service = service
+        self.settings = settings
     }
 
     // MARK: - Loading
@@ -114,7 +116,7 @@ final class HomeViewModel {
         defer { loadingDates.remove(key) }
 
         do {
-            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool ?? "")
+            let result = try await service.fetchDailyMenu(date: date, school: settings.selectedSchool ?? "")
             withAnimation(.easeInOut(duration: 0.25)) {
                 menuCache[key] = result
             }
@@ -129,7 +131,7 @@ final class HomeViewModel {
         defer { loadingDates.remove(key) }
 
         do {
-            let result = try await service.fetchDailyMenu(date: date, school: AppConfig.selectedSchool ?? "")
+            let result = try await service.fetchDailyMenu(date: date, school: settings.selectedSchool ?? "")
             withAnimation(.easeInOut(duration: 0.25)) {
                 menuCache[key] = result
             }
@@ -146,6 +148,17 @@ final class HomeViewModel {
         isCalendarPresented.toggle()
     }
 
+    // MARK: - Reset
+
+    func resetForSchoolChange() {
+        menuCache.removeAll()
+        currentDate = Calendar.current.startOfDay(for: Date())
+        selectedTab = 1
+        errorMessage = nil
+        Task {
+            await preload()
+        }
+    }
     // MARK: - Meal ordering
 
     func mealSectionOrder(now: Date, cafeterias: [Cafeteria]) -> [MealSection] {

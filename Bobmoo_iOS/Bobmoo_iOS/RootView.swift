@@ -8,15 +8,22 @@ struct RootView: View {
         case setting
     }
 
+    let settings: AppSettings
     @State private var route: Route = .splash
-    @State private var homeViewModel = HomeViewModel(service: HomeAPIMenuService())
-    @State private var searchViewModel = SearchViewModel(service: SearchAPISchoolService())
+    @State private var homeViewModel: HomeViewModel
+    @State private var searchViewModel: SearchViewModel
+
+    init(settings: AppSettings) {
+        self.settings = settings
+        self._homeViewModel = State(initialValue: HomeViewModel(service: HomeAPIMenuService(), settings: settings))
+        self._searchViewModel = State(initialValue: SearchViewModel(service: SearchAPISchoolService(), settings: settings))
+    }
 
     var body: some View {
         ZStack {
             if route == .search {
                 SearchView(viewModel: searchViewModel) {
-                    homeViewModel = HomeViewModel(service: HomeAPIMenuService())
+                    homeViewModel.resetForSchoolChange()
                     withAnimation(.easeInOut(duration: 0.35)) {
                         route = .home
                     }
@@ -27,7 +34,7 @@ struct RootView: View {
             if route == .splash {
                 SplashView(homeViewModel: homeViewModel) {
                     withAnimation(.easeInOut(duration: 0.35)) {
-                        route = AppConfig.selectedSchool != nil ? .home : .search
+                        route = settings.selectedSchool != nil ? .home : .search
                     }
                 }
                 .transition(.opacity.combined(with: .move(edge: .leading)))
@@ -44,12 +51,11 @@ struct RootView: View {
 
             if route == .setting {
                 SettingView(onBack: {
-                    homeViewModel = HomeViewModel(service: HomeAPIMenuService())
+                    homeViewModel.resetForSchoolChange()
                     withAnimation(.easeInOut(duration: 0.35)) {
                         route = .home
                     }
                 }, onSearchSchool: {
-                    searchViewModel = SearchViewModel(service: SearchAPISchoolService())
                     withAnimation(.easeInOut(duration: 0.35)) {
                         route = .search
                     }
@@ -62,5 +68,7 @@ struct RootView: View {
 }
 
 #Preview {
-    RootView()
+    let settings = AppSettings()
+    RootView(settings: settings)
+        .environment(settings)
 }

@@ -13,6 +13,7 @@ import Observation
 @Observable
 final class SearchViewModel {
     private let service: SearchSchoolService
+    private let settings: AppSettings
 
     var schools: [School] = []
     var query: String = ""
@@ -23,8 +24,9 @@ final class SearchViewModel {
         schools.count
     }
 
-    init(service: SearchSchoolService) {
+    init(service: SearchSchoolService, settings: AppSettings) {
         self.service = service
+        self.settings = settings
     }
 
     func fetchSchools() async {
@@ -40,7 +42,7 @@ final class SearchViewModel {
 
     func selectSchool(_ school: School) {
         selectedSchoolId = school.schoolId
-        AppConfig.selectedSchool = school.schoolName
-        AppConfig.selectedSchoolColor = school.schoolColor
+        settings.selectedSchool = school.schoolName
+        settings.selectedSchoolColor = school.schoolColor
     }
 }

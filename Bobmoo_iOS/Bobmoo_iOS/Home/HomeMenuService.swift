@@ -30,7 +30,7 @@ struct HomeAPIMenuService: HomeMenuService {
     }
 
     private func buildURL(date: Date, school: String) throws -> URL {
-        var components = URLComponents(url: AppConfig.baseURL, resolvingAgainstBaseURL: false)
+        var components = URLComponents(url: APIConfig.baseURL, resolvingAgainstBaseURL: false)
         let basePath = components?.path ?? ""
         components?.path = basePath + "/menu"
         components?.queryItems = [
