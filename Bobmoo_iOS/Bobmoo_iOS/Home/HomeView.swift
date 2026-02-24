@@ -56,7 +56,47 @@ struct DayMenuPageView: View {
         let cafeterias = viewModel.menu(for: date)?.cafeterias ?? []
 
         Group {
-            if viewModel.isEmptyMenu(for: date) {
+            if let errorMessage = viewModel.errorMessage {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        Image(.bobmooLogo)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 59)
+                            .padding(.top, 127)
+
+                        BobmooText("데이터를 불러올 수 없어요", style: .body_sb_18)
+                            .padding(.top, 24)
+
+                        BobmooText(errorMessage, style: .body_sb_15)
+                            .foregroundStyle(.bobmooGray3)
+                            .padding(.top, 21)
+
+                        Image(.iconArrow)
+                            .padding(.top, 118)
+
+                        BobmooText("아래로 당겨 새로고침", style: .body_sb_11)
+                            .foregroundStyle(.bobmooGray3)
+                            .padding(.top, 7)
+                            .padding(.bottom, 128)
+
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        Rectangle()
+                            .cornerRadius(15)
+                            .foregroundStyle(.bobmooWhite)
+                    )
+                    .padding(.horizontal, 28)
+                    .padding(.top, 30)
+                }
+                .scrollBounceBehavior(.always)
+                .refreshable {
+                    viewModel.errorMessage = nil
+                    await viewModel.reloadDate(date)
+                }
+            } else if viewModel.isEmptyMenu(for: date) {
                 ScrollView(showsIndicators: false) {
                     EmptyView()
                 }

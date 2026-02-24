@@ -37,6 +37,14 @@ struct SearchView: View {
         .task {
             await viewModel.fetchSchools()
         }
+        .alert("오류", isPresented: Binding(
+            get: { viewModel.errorMessage != nil },
+            set: { if !$0 { viewModel.errorMessage = nil } }
+        )) {
+            Button("확인") { viewModel.errorMessage = nil }
+        } message: {
+            Text(viewModel.errorMessage ?? "")
+        }
     }
 }
 

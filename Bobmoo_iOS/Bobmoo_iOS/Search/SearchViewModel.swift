@@ -34,6 +34,7 @@ final class SearchViewModel {
                 schools = response.data
             }
         } catch {
+            errorMessage = error.localizedDescription
             print("[SearchViewModel] fetchSchools failed: \(error)")
         }
     }
