@@ -5,6 +5,7 @@ struct RootView: View {
         case search
         case splash
         case home
+        case setting
     }
 
     @State private var route: Route = .splash
@@ -33,8 +34,27 @@ struct RootView: View {
             }
 
             if route == .home {
-                HomeView(viewModel: homeViewModel)
+                HomeView(viewModel: homeViewModel, onSetting: {
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        route = .setting
+                    }
+                })
                     .transition(.opacity.combined(with: .move(edge: .trailing)))
+            }
+
+            if route == .setting {
+                SettingView(onBack: {
+                    homeViewModel = HomeViewModel(service: HomeAPIMenuService())
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        route = .home
+                    }
+                }, onSearchSchool: {
+                    searchViewModel = SearchViewModel(service: SearchAPISchoolService())
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        route = .search
+                    }
+                })
+                .transition(.opacity.combined(with: .move(edge: .trailing)))
             }
         }
         .animation(.easeInOut(duration: 0.35), value: route)

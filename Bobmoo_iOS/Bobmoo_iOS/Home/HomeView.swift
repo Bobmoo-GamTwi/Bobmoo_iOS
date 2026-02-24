@@ -10,14 +10,16 @@ import Observation
 
 struct HomeView: View {
     @Bindable var viewModel: HomeViewModel
+    var onSetting: () -> Void
 
-    init(viewModel: HomeViewModel) {
+    init(viewModel: HomeViewModel, onSetting: @escaping () -> Void) {
         self.viewModel = viewModel
+        self.onSetting = onSetting
     }
        
     var body: some View {
         VStack(spacing: 0) {
-            HeaderView(viewModel: viewModel)
+            HeaderView(viewModel: viewModel, onSetting: onSetting)
 
             TabView(selection: $viewModel.selectedTab) {
                 DayMenuPageView(date: viewModel.dateForTab(0), viewModel: viewModel)
@@ -96,6 +98,7 @@ struct DayMenuPageView: View {
 
 struct HeaderView: View {
     let viewModel: HomeViewModel
+    var onSetting: () -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -105,7 +108,7 @@ struct HeaderView: View {
 
                 Spacer()
 
-                Button(action: {}) {
+                Button(action: onSetting) {
                     Image(.menu)
                 }
             }
@@ -244,5 +247,5 @@ struct EmptyView: View {
 }
 
 #Preview {
-    HomeView(viewModel: HomeViewModel(service: HomeMockMenuService()))
+    HomeView(viewModel: HomeViewModel(service: HomeMockMenuService()), onSetting: {})
 }
