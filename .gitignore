@@ -10,3 +10,6 @@
 # Environment files
 .env
 config.env
+
+# Sisyphus planning
+.sisyphus/

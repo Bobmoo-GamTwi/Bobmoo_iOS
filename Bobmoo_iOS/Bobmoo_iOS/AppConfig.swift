@@ -37,4 +37,16 @@ enum AppConfig {
             UserDefaults.standard.set(newValue, forKey: selectedSchoolColorKey)
         }
     }
+
+    private static let selectedCafeteriaKey = "selectedCafeteria"
+    private static let defaultCafeteria = "학생식당"
+
+    static var selectedCafeteria: String {
+        get {
+            UserDefaults.standard.string(forKey: selectedCafeteriaKey) ?? defaultCafeteria
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: selectedCafeteriaKey)
+        }
+    }
 }
