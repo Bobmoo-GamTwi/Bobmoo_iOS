@@ -6,13 +6,21 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct SplashView: View {
     let homeViewModel: HomeViewModel
+    let updateService: AppUpdateService
     let didTapStart: () -> Void
 
-    init(homeViewModel: HomeViewModel, didTapStart: @escaping () -> Void) {
+    @State private var updateURL: URL?
+    @State private var showUpdateAlert = false
+
+    init(homeViewModel: HomeViewModel,
+         updateService: AppUpdateService = AppUpdateAPIService(),
+         didTapStart: @escaping () -> Void) {
         self.homeViewModel = homeViewModel
+        self.updateService = updateService
         self.didTapStart = didTapStart
     }
 
@@ -46,13 +54,47 @@ struct SplashView: View {
                 .padding(.bottom, 21)
         }
         .task {
-            if !homeViewModel.isPreloaded {
-                await homeViewModel.preload()
+            async let preloadTask: () = preloadIfNeeded()
+            async let updateTask: () = checkForUpdate()
+            _ = await (preloadTask, updateTask)
+        }
+        .alert("업데이트 안내", isPresented: $showUpdateAlert) {
+            Button("업데이트") {
+                if let url = updateURL {
+                    UIApplication.shared.open(url)
+                }
             }
+            Button("나중에", role: .cancel) {}
+        } message: {
+            Text("새로운 버전이 출시되었습니다.\n더 나은 경험을 위해 업데이트해 주세요.")
+        }
+    }
+
+    private func preloadIfNeeded() async {
+        if !homeViewModel.isPreloaded {
+            await homeViewModel.preload()
+        }
+    }
+
+    @MainActor
+    private func checkForUpdate() async {
+        if case .updateAvailable(let storeURL) = await updateService.checkForUpdate() {
+            updateURL = storeURL
+            showUpdateAlert = true
         }
     }
 }
 
-#Preview {
+
+#Preview("기본") {
     SplashView(homeViewModel: HomeViewModel(service: HomeMockMenuService(), settings: AppSettings())) {}
+}
+
+#Preview("업데이트 있음") {
+    SplashView(
+        homeViewModel: HomeViewModel(service: HomeMockMenuService(), settings: AppSettings()),
+        updateService: AppUpdateMockService(result: .updateAvailable(
+            storeURL: URL(string: "itms-apps://itunes.apple.com/app/id123456789")!
+        ))
+    ) {}
 }
