@@ -109,7 +109,7 @@ final class HomeViewModel {
                 menuCache[key] = result
             }
         } catch {
-            let school = AppConfig.selectedSchool ?? ""
+            let school = settings.selectedSchool ?? ""
             if !school.isEmpty {
                 errorMessage = error.localizedDescription
             }
