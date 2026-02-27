@@ -9,7 +9,11 @@ import Foundation
 
 struct DailyMenuResponse: Decodable, Sendable {
     let date: String
-    let school: String
+    let schools: [SchoolMenu]
+}
+
+struct SchoolMenu: Decodable, Sendable {
+    let schoolName: String
     let cafeterias: [Cafeteria]
 }
 
