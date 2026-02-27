@@ -41,6 +41,29 @@ final class SearchViewModel {
         }
     }
 
+    func search(query: String) {
+        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !trimmedQuery.isEmpty else {
+            errorMessage = "학교 이름을 입력해 주세요"
+            return
+        }
+
+        errorMessage = nil
+
+        Task {
+            do {
+                let response = try await service.fetchSchools(schoolQuery: trimmedQuery)
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    schools = response.data
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+                print("[SearchViewModel] search failed: \(error)")
+            }
+        }
+    }
+
     func selectSchool(_ school: School) {
         selectedSchoolId = school.schoolId
         settings.selectedSchool = school.schoolName
