@@ -29,17 +29,6 @@ final class SearchViewModel {
         self.settings = settings
     }
 
-    func fetchSchools() async {
-        do {
-            let response = try await service.fetchSchools()
-            withAnimation(.easeInOut(duration: 0.25)) {
-                schools = response.data
-            }
-        } catch {
-            errorMessage = error.localizedDescription
-            print("[SearchViewModel] fetchSchools failed: \(error)")
-        }
-    }
 
     func search(query: String) {
         let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -66,7 +55,7 @@ final class SearchViewModel {
 
     func selectSchool(_ school: School) {
         selectedSchoolId = school.schoolId
-        settings.selectedSchool = school.schoolName
+        settings.selectedSchool = school.queryName
         settings.selectedSchoolColor = school.schoolColor
     }
 }

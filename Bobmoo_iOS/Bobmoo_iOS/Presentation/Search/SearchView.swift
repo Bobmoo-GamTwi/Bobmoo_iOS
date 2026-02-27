@@ -80,7 +80,7 @@ struct SearchResultView: View {
                     onSelect(school)
                 } label: {
                     HStack(spacing: 0) {
-                        BobmooText(school.schoolName, style: .body_b_15)
+                        BobmooText(school.displayName, style: .body_b_15)
 
                         Spacer()
                     }
