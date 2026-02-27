@@ -16,7 +16,7 @@ enum DietAPIService {
         }
 
         let dailyMenu = try JSONDecoder().decode(DailyMenuResponse.self, from: data)
-        return mapToDietEntry(dailyMenu, currentDate: date)
+        return mapToDietEntry(dailyMenu, currentDate: date, school: school)
     }
 
     private static func buildURL(date: Date, school: String) throws -> URL {
@@ -34,13 +34,12 @@ enum DietAPIService {
         return url
     }
 
-    private static func mapToDietEntry(_ response: DailyMenuResponse, currentDate: Date) -> DietEntry {
+    private static func mapToDietEntry(_ response: DailyMenuResponse, currentDate: Date, school: String) -> DietEntry {
         // Select cafeterias for the target school (fallback to first school)
-        // Task 10: Add proper school matching by name
-        let targetCafeterias = response.schools.first?.cafeterias ?? []
-        
+        let targetCafeterias = response.schools.first { $0.schoolName == school }?.cafeterias
+            ?? response.schools.first?.cafeterias
+            ?? []
         let mealTime = determineMealTime(from: targetCafeterias, currentDate: currentDate)
-
         let cafeteriaInfos: [CafeteriaInfo] = targetCafeterias.map { cafeteria in
             let hours: String
             let mealItems: [MealItem]?
