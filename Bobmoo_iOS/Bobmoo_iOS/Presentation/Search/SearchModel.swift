@@ -15,7 +15,16 @@ struct SchoolsResponse: Decodable, Sendable {
 struct School: Decodable, Sendable, Identifiable {
     let schoolId: Int
     let schoolName: String
+    let schoolNameK: String?
     let schoolColor: String
 
     var id: Int { schoolId }
+
+    var displayName: String {
+        schoolNameK ?? schoolName
+    }
+
+    var queryName: String {
+        schoolNameK ?? schoolName
+    }
 }

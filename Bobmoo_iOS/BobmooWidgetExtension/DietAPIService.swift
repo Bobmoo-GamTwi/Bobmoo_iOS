@@ -35,9 +35,13 @@ enum DietAPIService {
     }
 
     private static func mapToDietEntry(_ response: DailyMenuResponse, currentDate: Date) -> DietEntry {
-        let mealTime = determineMealTime(from: response.cafeterias, currentDate: currentDate)
+        // Select cafeterias for the target school (fallback to first school)
+        // Task 10: Add proper school matching by name
+        let targetCafeterias = response.schools.first?.cafeterias ?? []
+        
+        let mealTime = determineMealTime(from: targetCafeterias, currentDate: currentDate)
 
-        let cafeteriaInfos: [CafeteriaInfo] = response.cafeterias.map { cafeteria in
+        let cafeteriaInfos: [CafeteriaInfo] = targetCafeterias.map { cafeteria in
             let hours: String
             let mealItems: [MealItem]?
 
@@ -138,10 +142,13 @@ enum DietAPIService {
 
     struct DailyMenuResponse: Decodable, Sendable {
         let date: String
-        let school: String
-        let cafeterias: [Cafeteria]
+        let schools: [SchoolMenu]
     }
 
+    struct SchoolMenu: Decodable, Sendable {
+        let schoolName: String
+        let cafeterias: [Cafeteria]
+    }
     struct Cafeteria: Decodable, Sendable {
         let name: String
         let hours: Hours
