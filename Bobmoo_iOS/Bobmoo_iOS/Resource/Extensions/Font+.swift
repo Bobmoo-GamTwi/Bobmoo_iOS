@@ -39,16 +39,23 @@ enum BobmooFontName {
     case body_sb_9
     case body_r_15
     case caption_r_15
+    case widget_sb_7
+    case widget_sb_12
+    case widget_sb_14
+    case widget_m_11
+    case widget_r_11
+    case widget_r_11_tight
+    case widget_sb_11
 
     var weight: Font.PretendardWeight {
         switch self {
         case .head_b_48, .head_b_30, .head_b_21, .body_b_17, .body_b_15:
             return .bold
-        case .body_m_15, .body_m_11:
+        case .body_m_15, .body_m_11, .widget_m_11:
             return .medium
-        case .title_sb_30, .body_sb_18, .body_sb_15, .body_sb_11, .body_sb_12, .body_sb_11_tight, .body_sb_9:
+        case .title_sb_30, .body_sb_18, .body_sb_15, .body_sb_11, .body_sb_12, .body_sb_11_tight, .body_sb_9, .widget_sb_7, .widget_sb_12, .widget_sb_14, .widget_sb_11:
             return .semiBold
-        case .body_r_15, .caption_r_15:
+        case .body_r_15, .caption_r_15, .widget_r_11, .widget_r_11_tight:
             return .regular
         }
     }
@@ -85,6 +92,14 @@ enum BobmooFontName {
             return 15
         case .caption_r_15:
             return 15
+        case .widget_sb_7:
+            return 7
+        case .widget_sb_12:
+            return 12
+        case .widget_sb_14:
+            return 14
+        case .widget_m_11, .widget_r_11, .widget_r_11_tight, .widget_sb_11:
+            return 11
         }
     }
 
@@ -102,6 +117,14 @@ enum BobmooFontName {
             return 4
         case .body_sb_11_tight, .body_sb_9:
             return 2
+        case .widget_sb_7:
+            return 2
+        case .widget_sb_12, .widget_sb_14:
+            return 5
+        case .widget_m_11, .widget_r_11, .widget_r_11_tight:
+            return 2
+        case .widget_sb_11:
+            return 4
         }
     }
 
@@ -113,6 +136,12 @@ enum BobmooFontName {
         switch self {
         case .body_m_11:
             return 21
+        case .widget_sb_7:
+            return 21
+        case .widget_m_11, .widget_r_11:
+            return 20
+        case .widget_r_11_tight:
+            return 15
         default:
             return size
         }

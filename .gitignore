@@ -7,6 +7,10 @@
 **/*.xcuserstate
 **/xcschememanagement.plist
 
+# Xcode build artifacts
+**/build/
+.derivedData/
+
 # Environment files
 .env
 config.env

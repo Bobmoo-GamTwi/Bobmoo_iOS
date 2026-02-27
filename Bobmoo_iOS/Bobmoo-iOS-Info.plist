@@ -16,5 +16,16 @@
 		<string>Pretendard-SemiBold.otf</string>
 		<string>Pretendard-Thin.otf</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>bobmoo</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bobmoo</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
