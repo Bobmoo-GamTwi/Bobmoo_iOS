@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 protocol SearchSchoolService {
-    func fetchSchools() async throws -> SchoolsResponse
+    func fetchAllSchools() async throws -> SchoolsResponse
 }
 
 struct SearchAPISchoolService: SearchSchoolService {
@@ -17,7 +17,7 @@ struct SearchAPISchoolService: SearchSchoolService {
         case invalidURL
     }
 
-    func fetchSchools() async throws -> SchoolsResponse {
+    func fetchAllSchools() async throws -> SchoolsResponse {
         let url = try buildURL()
 
         let data = try await Session.default

@@ -48,7 +48,10 @@ final class HomeViewModel {
     var errorMessage: String?
 
     var univName: String {
-        menuCache.values.first?.school ?? "로딩중"
+        if let schoolName = settings.selectedSchool, !schoolName.isEmpty {
+            return schoolName
+        }
+        return menuCache.values.first?.schools.first?.schoolName ?? "로딩중"
     }
 
     var univColor: String { settings.selectedSchoolColor }
@@ -58,8 +61,11 @@ final class HomeViewModel {
         return String(format: "%04d-%02d-%02d", c.year!, c.month!, c.day!)
     }
 
-    func menu(for date: Date) -> DailyMenuResponse? {
-        menuCache[dateKey(date)]
+    func cafeterias(for date: Date) -> [Cafeteria] {
+        guard let menu = menuCache[dateKey(date)] else { return [] }
+        let schoolMenu = menu.schools.first { $0.schoolName == settings.selectedSchool }
+            ?? menu.schools.first
+        return schoolMenu?.cafeterias ?? []
     }
 
     func hasMenu(for date: Date) -> Bool {
@@ -67,8 +73,7 @@ final class HomeViewModel {
     }
 
     func isEmptyMenu(for date: Date) -> Bool {
-        guard let cached = menuCache[dateKey(date)] else { return false }
-        return cached.cafeterias.isEmpty
+        cafeterias(for: date).isEmpty
     }
 
     var isPreloaded: Bool {

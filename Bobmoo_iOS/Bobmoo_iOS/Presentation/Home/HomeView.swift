@@ -60,7 +60,7 @@ struct DayMenuPageView: View {
     let viewModel: HomeViewModel
 
     var body: some View {
-        let cafeterias = viewModel.menu(for: date)?.cafeterias ?? []
+        let cafeterias = viewModel.cafeterias(for: date)
 
         Group {
             if let errorMessage = viewModel.errorMessage {

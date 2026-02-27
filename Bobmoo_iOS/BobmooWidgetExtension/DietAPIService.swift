@@ -16,7 +16,7 @@ enum DietAPIService {
         }
 
         let dailyMenu = try JSONDecoder().decode(DailyMenuResponse.self, from: data)
-        return mapToDietEntry(dailyMenu, currentDate: date)
+        return mapToDietEntry(dailyMenu, currentDate: date, school: school)
     }
 
     private static func buildURL(date: Date, school: String) throws -> URL {
@@ -34,10 +34,13 @@ enum DietAPIService {
         return url
     }
 
-    private static func mapToDietEntry(_ response: DailyMenuResponse, currentDate: Date) -> DietEntry {
-        let mealTime = determineMealTime(from: response.cafeterias, currentDate: currentDate)
-
-        let cafeteriaInfos: [CafeteriaInfo] = response.cafeterias.map { cafeteria in
+    private static func mapToDietEntry(_ response: DailyMenuResponse, currentDate: Date, school: String) -> DietEntry {
+        // Select cafeterias for the target school (fallback to first school)
+        let targetCafeterias = response.schools.first { $0.schoolName == school }?.cafeterias
+            ?? response.schools.first?.cafeterias
+            ?? []
+        let mealTime = determineMealTime(from: targetCafeterias, currentDate: currentDate)
+        let cafeteriaInfos: [CafeteriaInfo] = targetCafeterias.map { cafeteria in
             let hours: String
             let mealItems: [MealItem]?
 
@@ -138,10 +141,31 @@ enum DietAPIService {
 
     struct DailyMenuResponse: Decodable, Sendable {
         let date: String
-        let school: String
-        let cafeterias: [Cafeteria]
+        let schools: [SchoolMenu]
+
+        private enum CodingKeys: String, CodingKey {
+            case date
+            case schools
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            date = try container.decode(String.self, forKey: .date)
+
+            if let array = try? container.decode([SchoolMenu].self, forKey: .schools) {
+                schools = array
+            } else if let object = try? container.decode(SchoolMenu.self, forKey: .schools) {
+                schools = [object]
+            } else {
+                schools = []
+            }
+        }
     }
 
+    struct SchoolMenu: Decodable, Sendable {
+        let schoolName: String
+        let cafeterias: [Cafeteria]
+    }
     struct Cafeteria: Decodable, Sendable {
         let name: String
         let hours: Hours

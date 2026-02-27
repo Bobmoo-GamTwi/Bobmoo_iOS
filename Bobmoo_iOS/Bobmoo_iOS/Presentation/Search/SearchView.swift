@@ -13,7 +13,7 @@ struct SearchView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            SearchHeaderView(query: $viewModel.query)
+            SearchHeaderView(query: $viewModel.query, onSearch: viewModel.search)
 
             SearchResultView(
                 schools: viewModel.schools,
@@ -34,9 +34,6 @@ struct SearchView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.bobmooGray4.ignoresSafeArea())
-        .task {
-            await viewModel.fetchSchools()
-        }
         .alert("오류", isPresented: Binding(
             get: { viewModel.errorMessage != nil },
             set: { if !$0 { viewModel.errorMessage = nil } }
@@ -50,6 +47,7 @@ struct SearchView: View {
 
 struct SearchHeaderView: View {
     @Binding var query: String
+    var onSearch: (String) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -57,7 +55,7 @@ struct SearchHeaderView: View {
                 .padding(.top, 25)
                 .padding(.leading, 26)
 
-            BobmooTextField(query: $query) { _ in }
+            BobmooTextField(query: $query, onSearch: onSearch)
                 .padding(.top, 14)
                 .padding(.horizontal, 17)
         }
@@ -82,7 +80,7 @@ struct SearchResultView: View {
                     onSelect(school)
                 } label: {
                     HStack(spacing: 0) {
-                        BobmooText(school.schoolName, style: .body_b_15)
+                        BobmooText(school.displayName, style: .body_b_15)
 
                         Spacer()
                     }

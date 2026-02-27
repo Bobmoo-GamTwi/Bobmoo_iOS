@@ -9,7 +9,29 @@ import Foundation
 
 struct DailyMenuResponse: Decodable, Sendable {
     let date: String
-    let school: String
+    let schools: [SchoolMenu]
+
+    private enum CodingKeys: String, CodingKey {
+        case date
+        case schools
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        date = try container.decode(String.self, forKey: .date)
+
+        if let array = try? container.decode([SchoolMenu].self, forKey: .schools) {
+            schools = array
+        } else if let object = try? container.decode(SchoolMenu.self, forKey: .schools) {
+            schools = [object]
+        } else {
+            schools = []
+        }
+    }
+}
+
+struct SchoolMenu: Decodable, Sendable {
+    let schoolName: String
     let cafeterias: [Cafeteria]
 }
 
