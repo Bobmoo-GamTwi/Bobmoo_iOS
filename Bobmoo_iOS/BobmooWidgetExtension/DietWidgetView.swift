@@ -16,7 +16,7 @@ struct DietWidgetView: View {
                 EmptyView()
             }
         }
-        .containerBackground(for: .widget) { Color.white }
+        .containerBackground(for: .widget) { Color.bobmooWhite }
     }
 }
 
@@ -27,24 +27,22 @@ private struct IosWidget1View: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            WidgetText.date(dateText)
-                .foregroundStyle(WidgetColor.gray3)
-                .frame(height: 21, alignment: .leading)
+            BobmooText(dateText, style: .widget_sb_7)
+                .foregroundStyle(.bobmooGray3)
                 .offset(x: 16, y: 11)
 
-            WidgetText.title(selectedCafeteriaInfo.name)
-                .foregroundStyle(.black)
+            BobmooText(selectedCafeteriaInfo.name, style: .widget_sb_12)
+                .foregroundStyle(.bobmooBlack)
                 .offset(x: 16, y: 31)
 
-            WidgetText.date(selectedCafeteriaInfo.hours)
-                .foregroundStyle(WidgetColor.gray3)
-                .frame(height: 21, alignment: .leading)
-                .offset(x: 65, y: 30)
+            BobmooText(selectedCafeteriaInfo.hours, style: .widget_sb_7)
+                .foregroundStyle(.bobmooGray3)
+                .offset(x: 65, y: 29)
 
             WidgetMenuList(menus: menusForCafeteria, maxWidth: 119)
                 .offset(x: 17, y: 55)
 
-            WidgetStatusBadge(status: status(for: selectedCafeteriaInfo.hours))
+            BobmooLabel(status: status(for: selectedCafeteriaInfo.hours))
                 .offset(x: 93, y: 120)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -66,11 +64,9 @@ private struct IosWidget1View: View {
         return formatter.string(from: entry.date)
     }
 
-    private func status(for hours: String) -> WidgetOperationStatus {
-        guard let period = hours.widgetOperationPeriod(on: entry.date) else {
-            return .ended
-        }
-        return WidgetOperationStatusResolver.resolve(now: .now, period: period)
+    private func status(for hours: String) -> OperationStatus {
+        guard let period = hours.bobmooOperationPeriod(on: entry.date) else { return .ended }
+        return OperationStatusResolver.resolve(now: .now, period: period)
     }
 }
 
@@ -81,18 +77,16 @@ private struct IosWidget2View: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            WidgetText.date(dateText)
-                .foregroundStyle(WidgetColor.gray3)
-                .frame(height: 21, alignment: .leading)
+            BobmooText(dateText, style: .widget_sb_7)
+                .foregroundStyle(.bobmooGray3)
                 .offset(x: 19, y: 12)
 
-            WidgetText.mealTime(entry.mealTime)
-                .foregroundStyle(.black)
+            BobmooText(entry.mealTime, style: .widget_sb_14)
+                .foregroundStyle(.bobmooBlack)
                 .offset(x: 19, y: 30)
 
-            WidgetText.date(hoursText)
-                .foregroundStyle(WidgetColor.gray3)
-                .frame(height: 21, alignment: .leading)
+            BobmooText(hoursText, style: .widget_sb_7)
+                .foregroundStyle(.bobmooGray3)
                 .offset(x: 48, y: 31)
 
             WidgetCafeteriaColumn(info: cafeteria(for: "학생식당"))
@@ -104,7 +98,7 @@ private struct IosWidget2View: View {
             WidgetCafeteriaColumn(info: cafeteria(for: "생활관식당"))
                 .offset(x: 228, y: 56)
 
-            WidgetStatusBadge(status: status(for: hoursText))
+            BobmooLabel(status: status(for: hoursText))
                 .offset(x: 268, y: 19)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -126,11 +120,9 @@ private struct IosWidget2View: View {
         return formatter.string(from: entry.date)
     }
 
-    private func status(for hours: String) -> WidgetOperationStatus {
-        guard let period = hours.widgetOperationPeriod(on: entry.date) else {
-            return .ended
-        }
-        return WidgetOperationStatusResolver.resolve(now: .now, period: period)
+    private func status(for hours: String) -> OperationStatus {
+        guard let period = hours.bobmooOperationPeriod(on: entry.date) else { return .ended }
+        return OperationStatusResolver.resolve(now: .now, period: period)
     }
 }
 
@@ -139,8 +131,8 @@ private struct WidgetCafeteriaColumn: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            WidgetText.title(info.name)
-                .foregroundStyle(.black)
+            BobmooText(info.name, style: .widget_sb_12)
+                .foregroundStyle(.bobmooBlack)
 
             WidgetMenuList(menus: WidgetCourseMenu.parse(from: info.menus), maxWidth: 93)
                 .offset(x: 0, y: 17)
@@ -158,7 +150,7 @@ private struct WidgetMenuList: View {
     var body: some View {
         HStack(spacing: 0) {
             Rectangle()
-                .fill(WidgetColor.gray5)
+                .fill(.bobmooGray5)
                 .frame(width: 1)
 
             VStack(alignment: .leading, spacing: 2) {
@@ -178,156 +170,26 @@ private struct WidgetMenuRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
-            WidgetText.course(item.course)
-                .foregroundStyle(.black)
+            BobmooText(item.course, style: .widget_m_11)
+                .foregroundStyle(.bobmooBlack)
                 .frame(width: 8, alignment: .leading)
 
             if item.course == "B" {
-                WidgetText.menu(item.menu, tight: true)
-                    .foregroundStyle(.black)
+                BobmooText(item.menu, style: .widget_r_11_tight)
+                    .foregroundStyle(.bobmooBlack)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                     .padding(.leading, 4)
                     .padding(.top, 3)
             } else {
-                WidgetText.menu(item.menu, tight: false)
-                    .foregroundStyle(.black)
+                BobmooText(item.menu, style: .widget_r_11)
+                    .foregroundStyle(.bobmooBlack)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                     .padding(.leading, 5)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-// MARK: - Status Badge
-
-private struct WidgetStatusBadge: View {
-    let status: WidgetOperationStatus
-
-    var body: some View {
-        WidgetText.badge(status.title)
-            .foregroundStyle(.white)
-            .frame(width: 50, height: 24)
-            .background(WidgetColor.blue)
-            .clipShape(Capsule())
-    }
-}
-
-// MARK: - Typography / Colors
-
-private enum WidgetColor {
-    static let blue = Color(red: 0x00 / 255.0, green: 0x64 / 255.0, blue: 0xFB / 255.0)
-    static let gray3 = Color(red: 0x61 / 255.0, green: 0x65 / 255.0, blue: 0x6F / 255.0)
-    static let gray5 = Color(red: 0x8F / 255.0, green: 0x8F / 255.0, blue: 0x8F / 255.0)
-}
-
-private enum WidgetText {
-    static func date(_ text: String) -> some View {
-        Text(text)
-            .font(.pretendard(.semiBold, size: 7))
-            .tracking(7 * 0.02)
-    }
-
-    static func title(_ text: String) -> some View {
-        Text(text)
-            .font(.pretendard(.semiBold, size: 12))
-            .tracking(12 * 0.05)
-    }
-
-    static func mealTime(_ text: String) -> some View {
-        Text(text)
-            .font(.pretendard(.semiBold, size: 14))
-            .tracking(14 * 0.05)
-    }
-
-    static func course(_ text: String) -> some View {
-        Text(text)
-            .font(.pretendard(.medium, size: 11))
-            .tracking(11 * 0.02)
-            .frame(height: 20, alignment: .topLeading)
-    }
-
-    static func menu(_ text: String, tight: Bool) -> some View {
-        Text(text)
-            .font(.pretendard(.regular, size: 11))
-            .tracking(11 * 0.02)
-            .lineLimit(1)
-            .truncationMode(.tail)
-            .frame(height: tight ? 15 : 20, alignment: .topLeading)
-    }
-
-    static func badge(_ text: String) -> some View {
-        Text(text)
-            .font(.pretendard(.semiBold, size: 11))
-            .tracking(11 * 0.04)
-    }
-}
-
-private extension Font {
-    enum PretendardWeight: String {
-        case semiBold = "SemiBold"
-        case medium = "Medium"
-        case regular = "Regular"
-
-        var fontName: String { "Pretendard-\(rawValue)" }
-    }
-
-    static func pretendard(_ weight: PretendardWeight, size: CGFloat) -> Font {
-        .custom(weight.fontName, size: size)
-    }
-}
-
-// MARK: - Operation Status
-
-private struct WidgetOperationPeriod {
-    let startAt: Date
-    let endAt: Date
-}
-
-private enum WidgetOperationStatus: String {
-    case before
-    case active
-    case ended
-
-    var title: String {
-        switch self {
-        case .before: return "운영전"
-        case .active: return "운영중"
-        case .ended: return "운영종료"
-        }
-    }
-}
-
-private enum WidgetOperationStatusResolver {
-    static func resolve(now: Date, period: WidgetOperationPeriod) -> WidgetOperationStatus {
-        if now < period.startAt { return .before }
-        if now <= period.endAt { return .active }
-        return .ended
-    }
-}
-
-private extension String {
-    func widgetOperationPeriod(on day: Date, calendar: Calendar = .current) -> WidgetOperationPeriod? {
-        guard !contains("미운영") else { return nil }
-
-        let delimiters = CharacterSet(charactersIn: "-~")
-        let parts = components(separatedBy: delimiters)
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-
-        guard parts.count == 2,
-              let startAt = calendar.widgetDate(on: day, timeText: parts[0]),
-              let endAt = calendar.widgetDate(on: day, timeText: parts[1]) else {
-            return nil
-        }
-
-        return WidgetOperationPeriod(startAt: startAt, endAt: endAt)
-    }
-}
-
-private extension Calendar {
-    func widgetDate(on day: Date, timeText: String) -> Date? {
-        let parts = timeText.split(separator: ":").compactMap { Int($0) }
-        guard parts.count == 2 else { return nil }
-        return date(bySettingHour: parts[0], minute: parts[1], second: 0, of: day)
     }
 }
 

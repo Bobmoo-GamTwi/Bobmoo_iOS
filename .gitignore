@@ -9,6 +9,7 @@
 
 # Xcode build artifacts
 **/build/
+.derivedData/
 
 # Environment files
 .env

@@ -7,8 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0771FDF131BD4A4C8F128251 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 542C7DFE1C124EDA9429682D /* Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf */; };
+		0ECE70815D6D4B169C3CD419 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 232FCC267B804EE9967EF587 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf */; };
+		1BEAB95FDE7445429F80B73E /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = CF4157B7E09D491DA5CF1A75 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf */; };
+		284017BD3F3043179BD30222 /* Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A1CF572C4B0643ECB99D6E17 /* Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf */; };
+		55F85D16A8E848EDB6901B38 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 53B412A68BBC4ED7ADF583DD /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf */; };
+		69E1B75386F14A4EBB3ED58E /* Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 940B3BC9F8BF47E9BB1028B8 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf */; };
+		6C09BB4C358A4A6ABABB838C /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 413FD0FC4D0A471AA4F450DE /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf */; };
+		73FCC88A63544F0E8897542F /* Bobmoo_iOS/Resource/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BAE0912481DF4502AD55B1EE /* Bobmoo_iOS/Resource/Assets.xcassets */; };
+		773B6F75D26E4A45A0C96017 /* Bobmoo_iOS/Resource/Components/BobmooLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36F68D6BC674EC285BC79FB /* Bobmoo_iOS/Resource/Components/BobmooLabel.swift */; };
+		9D8231E844A648CDACCED1B0 /* Bobmoo_iOS/Resource/Extensions/Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38393AE77B6D415982268462 /* Bobmoo_iOS/Resource/Extensions/Font+.swift */; };
+		B97FFD4EA4D54EB1861AE87D /* Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 98223F698704469E83F60835 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf */; };
+		C5828B6496A542AE95544934 /* Bobmoo_iOS/Network/APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DBF9905BF24ECC99C174CD /* Bobmoo_iOS/Network/APIConfig.swift */; };
 		CA47C2A02F488B33000D809C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CA47C29F2F488B33000D809C /* Alamofire */; };
-		CA47C2B12F488B33000D809C /* BobmooWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CA47C2A52F488B33000D809C /* BobmooWidgetExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CA47C2B12F488B33000D809C /* BobmooWidgetExtension.appex in CopyFiles */ = {isa = PBXBuildFile; fileRef = CA47C2A52F488B33000D809C /* BobmooWidgetExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D3A4953058454F03AE9F73AB /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50C75F4D030F48788B2C98C6 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf */; };
+		DC345A57B1764B0C9C9174D0 /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54C8B177962412CB960C50A /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift */; };
+		E614BF936DFA478C8C7C00C3 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -16,27 +31,42 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = CA80536E2F3F3CF80013A6A0 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = CA47C2A12F488B33000D809C /* BobmooWidgetExtension */;
+			remoteGlobalIDString = CA47C2A12F488B33000D809C;
 			remoteInfo = BobmooWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		CA47C2B02F488B33000D809C /* Embed App Extensions */ = {
+		CA47C2B02F488B33000D809C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				CA47C2B12F488B33000D809C /* BobmooWidgetExtension.appex in Embed App Extensions */,
+				CA47C2B12F488B33000D809C /* BobmooWidgetExtension.appex in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		232FCC267B804EE9967EF587 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf"; sourceTree = "<group>"; };
+		38393AE77B6D415982268462 /* Bobmoo_iOS/Resource/Extensions/Font+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bobmoo_iOS/Resource/Extensions/Font+.swift"; sourceTree = "<group>"; };
+		413FD0FC4D0A471AA4F450DE /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf"; sourceTree = "<group>"; };
+		50C75F4D030F48788B2C98C6 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		53B412A68BBC4ED7ADF583DD /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		542C7DFE1C124EDA9429682D /* Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		79DBF9905BF24ECC99C174CD /* Bobmoo_iOS/Network/APIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bobmoo_iOS/Network/APIConfig.swift; sourceTree = "<group>"; };
+		940B3BC9F8BF47E9BB1028B8 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		98223F698704469E83F60835 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		A1CF572C4B0643ECB99D6E17 /* Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		A36F68D6BC674EC285BC79FB /* Bobmoo_iOS/Resource/Components/BobmooLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bobmoo_iOS/Resource/Components/BobmooLabel.swift; sourceTree = "<group>"; };
+		BAE0912481DF4502AD55B1EE /* Bobmoo_iOS/Resource/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Bobmoo_iOS/Resource/Assets.xcassets; sourceTree = "<group>"; };
 		CA47C2A52F488B33000D809C /* BobmooWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BobmooWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA8053762F3F3CF80013A6A0 /* Bobmoo_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bobmoo_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF4157B7E09D491DA5CF1A75 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift"; sourceTree = "<group>"; };
+		E54C8B177962412CB960C50A /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -47,22 +77,6 @@
 		};
 		CA8053782F3F3CF80013A6A0 /* Bobmoo_iOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			membershipExceptions = (
-				{
-					includedPaths = (
-						Resource/Fonts/Pretendard-Black.otf,
-						Resource/Fonts/Pretendard-Bold.otf,
-						Resource/Fonts/Pretendard-ExtraBold.otf,
-						Resource/Fonts/Pretendard-ExtraLight.otf,
-						Resource/Fonts/Pretendard-Light.otf,
-						Resource/Fonts/Pretendard-Medium.otf,
-						Resource/Fonts/Pretendard-Regular.otf,
-						Resource/Fonts/Pretendard-SemiBold.otf,
-						Resource/Fonts/Pretendard-Thin.otf,
-					);
-					target = CA47C2A12F488B33000D809C /* BobmooWidgetExtension */;
-				},
-			);
 			path = Bobmoo_iOS;
 			sourceTree = "<group>";
 		};
@@ -87,12 +101,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CA0245782F5196EE0028FDFC /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				79DBF9905BF24ECC99C174CD /* Bobmoo_iOS/APIConfig.swift */,
+				A36F68D6BC674EC285BC79FB /* Bobmoo_iOS/Components/BobmooLabel.swift */,
+				38393AE77B6D415982268462 /* Bobmoo_iOS/Extensions/Font+.swift */,
+				E54C8B177962412CB960C50A /* Bobmoo_iOS/Extensions/OperationPeriod+Parse.swift */,
+				D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Extensions/UserDefaults+BobmooShared.swift */,
+				BAE0912481DF4502AD55B1EE /* Bobmoo_iOS/Assets.xcassets */,
+				413FD0FC4D0A471AA4F450DE /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf */,
+				50C75F4D030F48788B2C98C6 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf */,
+				53B412A68BBC4ED7ADF583DD /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf */,
+				CF4157B7E09D491DA5CF1A75 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf */,
+				232FCC267B804EE9967EF587 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf */,
+				98223F698704469E83F60835 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf */,
+				940B3BC9F8BF47E9BB1028B8 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf */,
+				A1CF572C4B0643ECB99D6E17 /* Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf */,
+				542C7DFE1C124EDA9429682D /* Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		CA80536D2F3F3CF70013A6A0 = {
 			isa = PBXGroup;
 			children = (
 				CA8053782F3F3CF80013A6A0 /* Bobmoo_iOS */,
 				CA47C2A92F488B33000D809C /* BobmooWidgetExtension */,
 				CA8053772F3F3CF80013A6A0 /* Products */,
+				CA0245782F5196EE0028FDFC /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,7 +172,7 @@
 				CA8053722F3F3CF80013A6A0 /* Sources */,
 				CA8053732F3F3CF80013A6A0 /* Frameworks */,
 				CA8053742F3F3CF80013A6A0 /* Resources */,
-				CA47C2B02F488B33000D809C /* Embed App Extensions */,
+				CA47C2B02F488B33000D809C /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -199,6 +236,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73FCC88A63544F0E8897542F /* Bobmoo_iOS/Assets.xcassets in Resources */,
+				6C09BB4C358A4A6ABABB838C /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf in Resources */,
+				D3A4953058454F03AE9F73AB /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf in Resources */,
+				55F85D16A8E848EDB6901B38 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf in Resources */,
+				1BEAB95FDE7445429F80B73E /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf in Resources */,
+				0ECE70815D6D4B169C3CD419 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf in Resources */,
+				B97FFD4EA4D54EB1861AE87D /* Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf in Resources */,
+				69E1B75386F14A4EBB3ED58E /* Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf in Resources */,
+				284017BD3F3043179BD30222 /* Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf in Resources */,
+				0771FDF131BD4A4C8F128251 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +263,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5828B6496A542AE95544934 /* Bobmoo_iOS/APIConfig.swift in Sources */,
+				773B6F75D26E4A45A0C96017 /* Bobmoo_iOS/Components/BobmooLabel.swift in Sources */,
+				9D8231E844A648CDACCED1B0 /* Bobmoo_iOS/Extensions/Font+.swift in Sources */,
+				DC345A57B1764B0C9C9174D0 /* Bobmoo_iOS/Extensions/OperationPeriod+Parse.swift in Sources */,
+				E614BF936DFA478C8C7C00C3 /* Bobmoo_iOS/Extensions/UserDefaults+BobmooShared.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +289,68 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		CA47C2A72F488B33000D809C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BobmooWidgetExtension/BobmooWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L743TBSZQQ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "BobmooWidgetExtension-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = BobmooWidgetExtension;
+				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS.BobmooWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CA47C2A82F488B33000D809C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = BobmooWidgetExtension/BobmooWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L743TBSZQQ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "BobmooWidgetExtension-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = BobmooWidgetExtension;
+				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS.BobmooWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		CA80537F2F3F3CF80013A6A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = CA8053782F3F3CF80013A6A0 /* Bobmoo_iOS */;
@@ -423,68 +537,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		CA47C2A72F488B33000D809C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = BobmooWidgetExtension/BobmooWidgetExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = L743TBSZQQ;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "BobmooWidgetExtension-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = BobmooWidgetExtension;
-				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 3.0;
-				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS.BobmooWidgetExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CA47C2A82F488B33000D809C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = BobmooWidgetExtension/BobmooWidgetExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = L743TBSZQQ;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = "BobmooWidgetExtension-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = BobmooWidgetExtension;
-				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 3.0;
-				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS.BobmooWidgetExtension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;

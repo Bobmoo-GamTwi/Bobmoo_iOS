@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import WidgetKit
 
 @Observable
 final class AppSettings {
@@ -15,6 +16,7 @@ final class AppSettings {
     private static let defaultSchoolColor = "005BAC"
     private static let selectedCafeteriaKey = "selectedCafeteria"
     private static let defaultCafeteria = "학생식당"
+    private static let dietWidgetKind = "DietWidget"
 
     var selectedSchool: String? {
         didSet { Self.defaults.set(selectedSchool, forKey: Self.selectedSchoolKey) }
@@ -25,7 +27,11 @@ final class AppSettings {
     }
 
     var selectedCafeteria: String {
-        didSet { Self.defaults.set(selectedCafeteria, forKey: Self.selectedCafeteriaKey) }
+        didSet {
+            Self.defaults.set(selectedCafeteria, forKey: Self.selectedCafeteriaKey)
+            guard oldValue != selectedCafeteria else { return }
+            WidgetCenter.shared.reloadTimelines(ofKind: Self.dietWidgetKind)
+        }
     }
 
     init() {
