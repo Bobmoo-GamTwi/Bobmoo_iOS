@@ -64,6 +64,17 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 0.35), value: route)
+        .onOpenURL { url in
+            guard url.scheme == "bobmoo" else { return }
+
+            let destination = url.host ?? url.pathComponents.dropFirst().first ?? "home"
+            if destination == "home" {
+                homeViewModel.resetForSchoolChange()
+                withAnimation(.easeInOut(duration: 0.35)) {
+                    route = settings.selectedSchool != nil ? .home : .search
+                }
+            }
+        }
     }
 }
 

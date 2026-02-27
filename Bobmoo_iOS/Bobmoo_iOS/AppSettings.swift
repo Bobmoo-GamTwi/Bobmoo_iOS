@@ -17,20 +17,43 @@ final class AppSettings {
     private static let defaultCafeteria = "학생식당"
 
     var selectedSchool: String? {
-        didSet { UserDefaults.standard.set(selectedSchool, forKey: Self.selectedSchoolKey) }
+        didSet { Self.defaults.set(selectedSchool, forKey: Self.selectedSchoolKey) }
     }
 
     var selectedSchoolColor: String {
-        didSet { UserDefaults.standard.set(selectedSchoolColor, forKey: Self.selectedSchoolColorKey) }
+        didSet { Self.defaults.set(selectedSchoolColor, forKey: Self.selectedSchoolColorKey) }
     }
 
     var selectedCafeteria: String {
-        didSet { UserDefaults.standard.set(selectedCafeteria, forKey: Self.selectedCafeteriaKey) }
+        didSet { Self.defaults.set(selectedCafeteria, forKey: Self.selectedCafeteriaKey) }
     }
 
     init() {
-        self.selectedSchool = UserDefaults.standard.string(forKey: Self.selectedSchoolKey)
-        self.selectedSchoolColor = UserDefaults.standard.string(forKey: Self.selectedSchoolColorKey) ?? Self.defaultSchoolColor
-        self.selectedCafeteria = UserDefaults.standard.string(forKey: Self.selectedCafeteriaKey) ?? Self.defaultCafeteria
+        Self.migrateStandardToSharedIfNeeded()
+
+        self.selectedSchool = Self.defaults.string(forKey: Self.selectedSchoolKey)
+        self.selectedSchoolColor = Self.defaults.string(forKey: Self.selectedSchoolColorKey) ?? Self.defaultSchoolColor
+        self.selectedCafeteria = Self.defaults.string(forKey: Self.selectedCafeteriaKey) ?? Self.defaultCafeteria
+    }
+}
+
+private extension AppSettings {
+    static var defaults: UserDefaults { .bobmooShared }
+
+    static func migrateStandardToSharedIfNeeded() {
+        let standard = UserDefaults.standard
+        let shared = Self.defaults
+
+        if shared.object(forKey: selectedSchoolKey) == nil, let value = standard.string(forKey: selectedSchoolKey) {
+            shared.set(value, forKey: selectedSchoolKey)
+        }
+
+        if shared.object(forKey: selectedSchoolColorKey) == nil, let value = standard.string(forKey: selectedSchoolColorKey) {
+            shared.set(value, forKey: selectedSchoolColorKey)
+        }
+
+        if shared.object(forKey: selectedCafeteriaKey) == nil, let value = standard.string(forKey: selectedCafeteriaKey) {
+            shared.set(value, forKey: selectedCafeteriaKey)
+        }
     }
 }
