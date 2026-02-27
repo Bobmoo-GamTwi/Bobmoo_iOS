@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 protocol SearchSchoolService {
-    func fetchSchools() async throws -> SchoolsResponse
+    func fetchSchools(schoolQuery: String) async throws -> SchoolsResponse
 }
 
 struct SearchAPISchoolService: SearchSchoolService {
@@ -17,8 +17,8 @@ struct SearchAPISchoolService: SearchSchoolService {
         case invalidURL
     }
 
-    func fetchSchools() async throws -> SchoolsResponse {
-        let url = try buildURL()
+    func fetchSchools(schoolQuery: String) async throws -> SchoolsResponse {
+        let url = try buildURL(schoolQuery: schoolQuery)
 
         let data = try await Session.default
             .request(url, method: .get)
@@ -29,10 +29,13 @@ struct SearchAPISchoolService: SearchSchoolService {
         return try JSONDecoder().decode(SchoolsResponse.self, from: data)
     }
 
-    private func buildURL() throws -> URL {
+    private func buildURL(schoolQuery: String) throws -> URL {
         var components = URLComponents(url: APIConfig.baseURL, resolvingAgainstBaseURL: false)
         let basePath = components?.path ?? ""
         components?.path = basePath + "/schools"
+        components?.queryItems = [
+            URLQueryItem(name: "school", value: schoolQuery)
+        ]
 
         guard let url = components?.url else {
             throw ServiceError.invalidURL
