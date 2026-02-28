@@ -104,12 +104,12 @@
 		CA0245782F5196EE0028FDFC /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				79DBF9905BF24ECC99C174CD /* Bobmoo_iOS/APIConfig.swift */,
-				A36F68D6BC674EC285BC79FB /* Bobmoo_iOS/Components/BobmooLabel.swift */,
-				38393AE77B6D415982268462 /* Bobmoo_iOS/Extensions/Font+.swift */,
-				E54C8B177962412CB960C50A /* Bobmoo_iOS/Extensions/OperationPeriod+Parse.swift */,
-				D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Extensions/UserDefaults+BobmooShared.swift */,
-				BAE0912481DF4502AD55B1EE /* Bobmoo_iOS/Assets.xcassets */,
+				79DBF9905BF24ECC99C174CD /* Bobmoo_iOS/Network/APIConfig.swift */,
+				A36F68D6BC674EC285BC79FB /* Bobmoo_iOS/Resource/Components/BobmooLabel.swift */,
+				38393AE77B6D415982268462 /* Bobmoo_iOS/Resource/Extensions/Font+.swift */,
+				E54C8B177962412CB960C50A /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift */,
+				D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift */,
+				BAE0912481DF4502AD55B1EE /* Bobmoo_iOS/Resource/Assets.xcassets */,
 				413FD0FC4D0A471AA4F450DE /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf */,
 				50C75F4D030F48788B2C98C6 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf */,
 				53B412A68BBC4ED7ADF583DD /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf */,
@@ -236,7 +236,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73FCC88A63544F0E8897542F /* Bobmoo_iOS/Assets.xcassets in Resources */,
+				73FCC88A63544F0E8897542F /* Bobmoo_iOS/Resource/Assets.xcassets in Resources */,
 				6C09BB4C358A4A6ABABB838C /* Bobmoo_iOS/Resource/Fonts/Pretendard-Black.otf in Resources */,
 				D3A4953058454F03AE9F73AB /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf in Resources */,
 				55F85D16A8E848EDB6901B38 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraBold.otf in Resources */,
@@ -263,11 +263,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5828B6496A542AE95544934 /* Bobmoo_iOS/APIConfig.swift in Sources */,
-				773B6F75D26E4A45A0C96017 /* Bobmoo_iOS/Components/BobmooLabel.swift in Sources */,
-				9D8231E844A648CDACCED1B0 /* Bobmoo_iOS/Extensions/Font+.swift in Sources */,
-				DC345A57B1764B0C9C9174D0 /* Bobmoo_iOS/Extensions/OperationPeriod+Parse.swift in Sources */,
-				E614BF936DFA478C8C7C00C3 /* Bobmoo_iOS/Extensions/UserDefaults+BobmooShared.swift in Sources */,
+				C5828B6496A542AE95544934 /* Bobmoo_iOS/Network/APIConfig.swift in Sources */,
+				773B6F75D26E4A45A0C96017 /* Bobmoo_iOS/Resource/Components/BobmooLabel.swift in Sources */,
+				9D8231E844A648CDACCED1B0 /* Bobmoo_iOS/Resource/Extensions/Font+.swift in Sources */,
+				DC345A57B1764B0C9C9174D0 /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift in Sources */,
+				E614BF936DFA478C8C7C00C3 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
