@@ -26,26 +26,32 @@ private struct IosWidget1View: View {
     let entry: DietEntry
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            BobmooText(dateText, style: .widget_sb_7)
-                .foregroundStyle(.bobmooGray3)
-                .offset(x: 16, y: 11)
+        Group {
+            if isEmptyState {
+                WidgetEmptyStateView()
+            } else {
+                ZStack(alignment: .topLeading) {
+                    BobmooText(dateText, style: .widget_sb_7)
+                        .foregroundStyle(.bobmooGray3)
+                        .offset(x: 16, y: 11)
 
-            BobmooText(selectedCafeteriaInfo.name, style: .widget_sb_12)
-                .foregroundStyle(.bobmooBlack)
-                .offset(x: 16, y: 31)
+                    BobmooText(selectedCafeteriaInfo.name, style: .widget_sb_12)
+                        .foregroundStyle(.bobmooBlack)
+                        .offset(x: 16, y: 31)
 
-            BobmooText(selectedCafeteriaInfo.hours, style: .widget_sb_7)
-                .foregroundStyle(.bobmooGray3)
-                .offset(x: 65, y: 29)
+                    BobmooText(selectedCafeteriaInfo.hours, style: .widget_sb_7)
+                        .foregroundStyle(.bobmooGray3)
+                        .offset(x: 65, y: 29)
 
-            WidgetMenuList(menus: menusForCafeteria, maxWidth: 119)
-                .offset(x: 17, y: 55)
+                    WidgetMenuList(menus: menusForCafeteria, maxWidth: 119)
+                        .offset(x: 17, y: 55)
 
-            BobmooLabel(status: status(for: selectedCafeteriaInfo.hours))
-                .offset(x: 93, y: 120)
+                    BobmooLabel(status: status(for: selectedCafeteriaInfo.hours))
+                        .offset(x: 93, y: 120)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
     private var selectedCafeteriaInfo: CafeteriaInfo {
@@ -64,6 +70,11 @@ private struct IosWidget1View: View {
         return formatter.string(from: entry.date)
     }
 
+    private var isEmptyState: Bool {
+        if entry.cafeterias.isEmpty { return true }
+        return selectedCafeteriaInfo.isUnavailableForWidget
+    }
+
     private func status(for hours: String) -> OperationStatus {
         guard let period = hours.bobmooOperationPeriod(on: entry.date) else { return .ended }
         return OperationStatusResolver.resolve(now: .now, period: period)
@@ -76,32 +87,38 @@ private struct IosWidget2View: View {
     let entry: DietEntry
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            BobmooText(dateText, style: .widget_sb_7)
-                .foregroundStyle(.bobmooGray3)
-                .offset(x: 19, y: 12)
+        Group {
+            if isEmptyState {
+                WidgetEmptyStateView()
+            } else {
+                ZStack(alignment: .topLeading) {
+                    BobmooText(dateText, style: .widget_sb_7)
+                        .foregroundStyle(.bobmooGray3)
+                        .offset(x: 19, y: 12)
 
-            BobmooText(entry.mealTime, style: .widget_sb_14)
-                .foregroundStyle(.bobmooBlack)
-                .offset(x: 19, y: 30)
+                    BobmooText(entry.mealTime, style: .widget_sb_14)
+                        .foregroundStyle(.bobmooBlack)
+                        .offset(x: 19, y: 30)
 
-            BobmooText(hoursText, style: .widget_sb_7)
-                .foregroundStyle(.bobmooGray3)
-                .offset(x: 48, y: 31)
+                    BobmooText(hoursText, style: .widget_sb_7)
+                        .foregroundStyle(.bobmooGray3)
+                        .offset(x: 48, y: 31)
 
-            WidgetCafeteriaColumn(info: cafeteria(for: "학생식당"))
-                .offset(x: 20, y: 56)
+                    WidgetCafeteriaColumn(info: cafeteria(for: "학생식당"))
+                        .offset(x: 20, y: 56)
 
-            WidgetCafeteriaColumn(info: cafeteria(for: "교직원식당"))
-                .offset(x: 126, y: 56)
+                    WidgetCafeteriaColumn(info: cafeteria(for: "교직원식당"))
+                        .offset(x: 126, y: 56)
 
-            WidgetCafeteriaColumn(info: cafeteria(for: "생활관식당"))
-                .offset(x: 228, y: 56)
+                    WidgetCafeteriaColumn(info: cafeteria(for: "생활관식당"))
+                        .offset(x: 228, y: 56)
 
-            BobmooLabel(status: status(for: hoursText))
-                .offset(x: 268, y: 19)
+                    BobmooLabel(status: status(for: hoursText))
+                        .offset(x: 268, y: 19)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
     private func cafeteria(for name: String) -> CafeteriaInfo {
@@ -120,9 +137,39 @@ private struct IosWidget2View: View {
         return formatter.string(from: entry.date)
     }
 
+    private var isEmptyState: Bool {
+        if entry.cafeterias.isEmpty { return true }
+        return entry.cafeterias.allSatisfy(\.isUnavailableForWidget)
+    }
+
     private func status(for hours: String) -> OperationStatus {
         guard let period = hours.bobmooOperationPeriod(on: entry.date) else { return .ended }
         return OperationStatusResolver.resolve(now: .now, period: period)
+    }
+}
+
+private struct WidgetEmptyStateView: View {
+    var body: some View {
+        ZStack(alignment: .top) {
+            Image(.iconBob)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 57, height: 57)
+                .offset(y: 21)
+
+            BobmooText("등록된 식단이 없어요", style: .widget_sb_12)
+                .foregroundStyle(.bobmooBlack)
+                .offset(y: 90)
+
+            VStack(alignment: .leading, spacing: -7) {
+                BobmooText("식단 정보가 등록되지 않았어요.", style: .widget_sb_7)
+                BobmooText("잠시 후 다시 확인해주세요.", style: .widget_sb_7)
+                    .padding(.leading, 4)
+            }
+            .foregroundStyle(.bobmooGray5)
+            .offset(y: 108)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
 
@@ -239,6 +286,17 @@ private struct WidgetCourseMenu: Hashable {
     }
 }
 
+private extension CafeteriaInfo {
+    var isUnavailableForWidget: Bool {
+        if hours.contains("미운영") { return true }
+
+        let parsedMenus = WidgetCourseMenu.parse(from: menus)
+        if parsedMenus.isEmpty { return true }
+
+        return parsedMenus.allSatisfy { $0.menu.contains("미운영") }
+    }
+}
+
 #Preview(as: .systemSmall) {
     DietWidget()
 } timeline: {
@@ -265,6 +323,16 @@ private struct WidgetCourseMenu: Hashable {
     )
 }
 
+#Preview("Empty Small", as: .systemSmall) {
+    DietWidget()
+} timeline: {
+    DietEntry(
+        date: .now,
+        mealTime: "점심",
+        cafeterias: []
+    )
+}
+
 #Preview(as: .systemMedium) {
     DietWidget()
 } timeline: {
@@ -288,5 +356,15 @@ private struct WidgetCourseMenu: Hashable {
                 menus: ["A: 돈가스*소스", "B: 어묵볶음, 김치콩나물국", "C: 요구르트"]
             )
         ]
+    )
+}
+
+#Preview("Empty Medium", as: .systemMedium) {
+    DietWidget()
+} timeline: {
+    DietEntry(
+        date: .now,
+        mealTime: "점심",
+        cafeterias: []
     )
 }
