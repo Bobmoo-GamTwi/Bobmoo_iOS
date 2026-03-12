@@ -94,9 +94,10 @@ struct SearchResultView: View {
                     .padding(.leading, 21)
                     .padding(.trailing, 18)
                     .padding(.top, 26)
-                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
 
                 Divider()
                     .padding(.top, 22)
@@ -104,6 +105,7 @@ struct SearchResultView: View {
                     .foregroundStyle(.bobmooGray5)
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, 18)
         .background(
             Rectangle()
