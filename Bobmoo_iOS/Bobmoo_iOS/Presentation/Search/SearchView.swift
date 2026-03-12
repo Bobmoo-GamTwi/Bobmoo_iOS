@@ -84,6 +84,7 @@ struct SearchResultView: View {
 
                         Spacer()
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .overlay(alignment: .trailing) {
                         if selectedSchoolId == school.schoolId {
                             Image(.check)
@@ -91,7 +92,9 @@ struct SearchResultView: View {
                         }
                     }
                     .padding(.leading, 21)
+                    .padding(.trailing, 18)
                     .padding(.top, 26)
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
 
