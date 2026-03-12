@@ -76,24 +76,31 @@ struct SearchResultView: View {
                 .padding(.top, 18)
 
             ForEach(schools) { school in
+                let isSelected = selectedSchoolId == school.schoolId
+
                 Button {
                     onSelect(school)
                 } label: {
                     HStack(spacing: 0) {
                         BobmooText(school.displayName, style: .body_b_15)
+                            .foregroundStyle(isSelected ? .bobmooWhite : .bobmooBlack)
 
                         Spacer()
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .overlay(alignment: .trailing) {
-                        if selectedSchoolId == school.schoolId {
+                        if isSelected {
                             Image(.check)
+                                .foregroundStyle(.bobmooWhite)
                                 .padding(.trailing, 18)
                         }
                     }
                     .padding(.leading, 21)
                     .padding(.trailing, 18)
                     .padding(.top, 26)
+                    .padding(.bottom, 11)
+                    .background(isSelected ? .bobmooBlack : .bobmooWhite)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 .buttonStyle(.plain)
                 .frame(maxWidth: .infinity, alignment: .leading)
