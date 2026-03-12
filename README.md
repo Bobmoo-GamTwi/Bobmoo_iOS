@@ -1,12 +1,14 @@
-# <p align="center">🍚 Bobmoo (밥묵자)</p>
+# <p align="center"> 밥묵자 </p>
   
 <p align="center">  
-  <img width="300" alt="bobmoo_logo" src="https://github.com/user-attachments/assets/bobmoo_logo_placeholder.png" />  
+  <img width="120" height="120" alt="Group 17" src="https://github.com/user-attachments/assets/5ddb2665-ab6f-4519-87c3-3c215afaa193" />
 </p>  
+
+
 
 <p align="center">
   <b>대학교 급식 정보를 한눈에</b><br/>
-  학교 설정부터 위젯까지, 똑똑한 급식 관리 앱
+  학교 설정부터 위젯까지, 대학교 학식 관리앱
 </p>
 
 <br/>
@@ -31,8 +33,9 @@
 ## 🍎 iOS Developer
 | 송성용<br/>[@soseoyo](https://github.com/soseoyo12) |
 | :---: |
-| <p align="center"><img src="https://github.com/user-attachments/assets/developer_placeholder.png" width="200"/></p> |
+| <p align="center"><img src="https://github.com/user-attachments/assets/7ef8590a-2241-4b1f-ad61-1ec5c2f2eaf2" width="200"/></p> |
 | `홈` `검색` `설정` `위젯` |
+
 
 <br />
 
@@ -44,6 +47,14 @@
 | **MVVM** | 뷰와 비즈니스 로직의 명확한 분리로 유지보수성 향상 |
 | **WidgetKit** | iOS 홈/잠금화면 위젯 구현을 위한 Apple 공식 프레임워크 |
 | **Observation** | SwiftUI의 새로운 상태 관리 패턴으로 효율적인 데이터 흐름 |
+
+<br />
+
+## 📱 Screenshots
+| 홈 화면 | 학교 검색 | 설정 |
+|:---:|:---:|:---:|
+| <img src="https://github.com/user-attachments/assets/0aef96df-0693-4e49-afbc-7757b13fc1d4" width="200"/> | <img src="https://github.com/user-attachments/assets/63f1ecca-cf27-40eb-8e98-ef5f9d33cb79" width="200"/> | <img src="https://github.com/user-attachments/assets/cbcd36da-b315-427e-99a8-cb1d0c510969" width="200"/> |
+| <img src="https://github.com/user-attachments/assets/e6933a2f-360d-49a8-aa9e-58037e637bdf" width="200"/> | <img src="https://github.com/user-attachments/assets/662aecc0-4866-4a56-8f5a-6c155b38961c" width="200"/> | <img src="https://github.com/user-attachments/assets/f248d405-19f1-40f5-83ad-a52db3c9eee7" width="200"/> |
 
 <br />
 
@@ -143,17 +154,11 @@ fix: #2 api 응답 파싱 오류 수정
 - **풀다운 새로고침**: 당겨서 새로고침으로 최신 데이터 동기화
 - **위젯 지원**: 잠금화면/홈화면에서 빠른 급식 확인
 
-<br/>
-
-## 📱 Screenshots
-| 홈 화면 | 학교 검색 | 설정 | 위젯 |
-|:---:|:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/home_placeholder.png" width="200"/> | <img src="https://github.com/user-attachments/assets/search_placeholder.png" width="200"/> | <img src="https://github.com/user-attachments/assets/setting_placeholder.png" width="200"/> | <img src="https://github.com/user-attachments/assets/widget_placeholder.png" width="200"/> |
 
 <br/>
 
 ## 🔗 Links
-- [📱 App Store](https://apps.apple.com/app/bobmoo) *(배포 후 업데이트)*
+- [App Store](https://apps.apple.com/kr/app/%EB%B0%A5%EB%AC%B5%EC%9E%90/id6751774906?l=en-GB) 
 
 ---
 <p align="center">Made with 🍚 by <a href="https://github.com/soseoyo12">@soseoyo</a></p>
