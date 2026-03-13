@@ -11,11 +11,13 @@ struct RootView: View {
     }
 
     let settings: AppSettings
+    private let analytics = BobmooAnalytics.shared
     @State private var route: Route = .splash
     @State private var homeViewModel: HomeViewModel
     @State private var searchViewModel: SearchViewModel
     @State private var pendingUpdateURL: URL?
     @State private var showUpdateAlert = false
+    @State private var didLogInitialAnalytics = false
 
     init(settings: AppSettings) {
         self.settings = settings
@@ -50,6 +52,7 @@ struct RootView: View {
 
             if route == .onboarding {
                 OnboardingView {
+                    analytics.logOnboardingStarted(hasSelectedSchool: settings.selectedSchool != nil)
                     withAnimation(.easeInOut(duration: 0.35)) {
                         route = settings.selectedSchool != nil ? .home : .search
                     }
@@ -59,6 +62,7 @@ struct RootView: View {
 
             if route == .home {
                 HomeView(viewModel: homeViewModel, onSetting: {
+                    analytics.logSettingsOpened(source: "home", schoolName: settings.selectedSchool)
                     withAnimation(.easeInOut(duration: 0.35)) {
                         route = .setting
                     }
@@ -73,6 +77,7 @@ struct RootView: View {
                         route = .home
                     }
                 }, onSearchSchool: {
+                    analytics.logSchoolSettingTapped(currentSchoolName: settings.selectedSchool)
                     withAnimation(.easeInOut(duration: 0.35)) {
                         route = .search
                     }
@@ -81,21 +86,31 @@ struct RootView: View {
             }
         }
         .animation(.easeInOut(duration: 0.35), value: route)
+        .task {
+            guard !didLogInitialAnalytics else { return }
+            didLogInitialAnalytics = true
+            analytics.logAppOpen(hasSelectedSchool: settings.selectedSchool != nil)
+            trackRoute(route, entryPoint: "app_launch")
+        }
         .alert("업데이트 안내", isPresented: $showUpdateAlert) {
             Button("업데이트") {
+                analytics.logUpdatePromptAction("update")
                 if let pendingUpdateURL {
                     UIApplication.shared.open(pendingUpdateURL)
                 }
                 pendingUpdateURL = nil
             }
             Button("나중에", role: .cancel) {
+                analytics.logUpdatePromptAction("later")
                 pendingUpdateURL = nil
             }
         } message: {
             Text("새로운 버전이 출시되었습니다.\n더 나은 경험을 위해 업데이트해 주세요.")
         }
         .onChange(of: route) { _, newRoute in
+            trackRoute(newRoute)
             if newRoute == .home, pendingUpdateURL != nil {
+                analytics.logUpdatePromptShown()
                 showUpdateAlert = true
             }
         }
@@ -103,12 +118,29 @@ struct RootView: View {
             guard url.scheme == "bobmoo" else { return }
 
             let destination = url.host ?? url.pathComponents.dropFirst().first ?? "home"
+            analytics.logDeepLinkOpened(destination: destination, hasSelectedSchool: settings.selectedSchool != nil)
             if destination == "home" {
                 homeViewModel.resetForSchoolChange()
                 withAnimation(.easeInOut(duration: 0.35)) {
                     route = settings.selectedSchool != nil ? .home : .search
                 }
             }
+        }
+    }
+
+    private func trackRoute(_ route: Route, entryPoint: String? = nil) {
+        switch route {
+        case .search:
+            analytics.logScreenView(.search, entryPoint: entryPoint)
+        case .splash:
+            analytics.logScreenView(.splash, entryPoint: entryPoint)
+        case .onboarding:
+            analytics.logScreenView(.onboarding, entryPoint: entryPoint)
+        case .home:
+            analytics.logScreenView(.home, entryPoint: entryPoint)
+            analytics.logHomeOpened(schoolName: settings.selectedSchool, date: homeViewModel.currentDate)
+        case .setting:
+            analytics.logScreenView(.setting, entryPoint: entryPoint)
         }
     }
 }

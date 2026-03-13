@@ -10,6 +10,7 @@ import Observation
 
 struct BobmooCalendarButton: View {
     @Bindable var vm: HomeViewModel
+    private let analytics = BobmooAnalytics.shared
 
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -24,7 +25,10 @@ struct BobmooCalendarButton: View {
     }
      
     var body: some View {
-        Button(action: { vm.isCalendarPresented = true }) {
+        Button(action: {
+            analytics.logCalendarOpened(date: vm.currentDate)
+            vm.isCalendarPresented = true
+        }) {
             HStack(spacing: 6) {
                 BobmooText(formattedDate, style: .body_sb_12)
             }
