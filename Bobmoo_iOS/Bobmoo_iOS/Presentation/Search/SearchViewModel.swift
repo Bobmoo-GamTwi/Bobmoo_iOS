@@ -14,6 +14,7 @@ import Observation
 final class SearchViewModel {
     private let service: SearchSchoolService
     private let settings: AppSettings
+    private let analytics = BobmooAnalytics.shared
 
     var schools: [School] = []
     var query: String = ""
@@ -22,6 +23,11 @@ final class SearchViewModel {
 
     var searchAmount: Int {
         schools.count
+    }
+
+    var selectedSchoolName: String? {
+        guard let selectedSchoolId else { return nil }
+        return allSchools.first { $0.schoolId == selectedSchoolId }?.queryName
     }
 
     private var allSchools: [School] = []
@@ -43,6 +49,7 @@ final class SearchViewModel {
             withAnimation(.easeInOut(duration: 0.25)) {
                 schools = allSchools
             }
+            analytics.logSearchResultsLoaded(count: allSchools.count)
         } catch {
             errorMessage = error.localizedDescription
             print("[SearchViewModel] loadAllSchools failed: \(error)")
@@ -58,6 +65,7 @@ final class SearchViewModel {
             withAnimation(.easeInOut(duration: 0.25)) {
                 schools = allSchools
             }
+            analytics.logSearch(queryLength: 0, resultCount: schools.count, isEmptyQuery: true)
             return
         }
 
@@ -69,11 +77,14 @@ final class SearchViewModel {
                 school.displayName.localizedCaseInsensitiveContains(trimmedQuery)
             }
         }
+
+        analytics.logSearch(queryLength: trimmedQuery.count, resultCount: schools.count, isEmptyQuery: false)
     }
 
     func selectSchool(_ school: School) {
         selectedSchoolId = school.schoolId
         settings.selectedSchool = school.queryName
         settings.selectedSchoolColor = school.schoolColor
+        analytics.logSchoolSelected(id: school.schoolId, name: school.queryName)
     }
 }

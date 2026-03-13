@@ -10,6 +10,7 @@ import SwiftUI
 struct SearchView: View {
     @Bindable var viewModel: SearchViewModel
     var didComplete: () -> Void
+    private let analytics = BobmooAnalytics.shared
 
     var body: some View {
         VStack(spacing: 0) {
@@ -27,6 +28,10 @@ struct SearchView: View {
             Spacer()
 
             BobmooButton(label: "선택완료") {
+                analytics.logSchoolSelectionCompleted(
+                    selectedSchoolId: viewModel.selectedSchoolId,
+                    schoolName: viewModel.selectedSchoolName
+                )
                 didComplete()
             }
             .padding(.horizontal, 40)

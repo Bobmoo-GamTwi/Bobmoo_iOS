@@ -14,6 +14,7 @@ import Observation
 final class HomeViewModel {
     private let service: HomeMenuService
     private let settings: AppSettings
+    private let analytics = BobmooAnalytics.shared
 
     enum MealSection: CaseIterable, Hashable {
         case breakfast
@@ -37,8 +38,14 @@ final class HomeViewModel {
 
         let offset = newTab - 1
         let base = Calendar.current.startOfDay(for: currentDate)
+        let updatedDate = Calendar.current.date(byAdding: .day, value: offset, to: base)!
+        analytics.logDateSwiped(
+            direction: offset > 0 ? "next" : "previous",
+            fromDate: base,
+            toDate: updatedDate
+        )
         selectedTab = 1
-        currentDate = Calendar.current.date(byAdding: .day, value: offset, to: base)!
+        currentDate = updatedDate
     }
 
     // MARK: - Data
@@ -102,6 +109,10 @@ final class HomeViewModel {
     }
 
     func loadIfNeeded(date: Date) async {
+        await loadIfNeeded(date: date, source: "load_if_needed")
+    }
+
+    func loadIfNeeded(date: Date, source: String) async {
         let key = dateKey(date)
         guard menuCache[key] == nil, !loadingDates.contains(key) else { return }
 
@@ -113,27 +124,57 @@ final class HomeViewModel {
             withAnimation(.easeInOut(duration: 0.25)) {
                 menuCache[key] = result
             }
+            analytics.logMenuLoadSucceeded(
+                date: date,
+                schoolName: settings.selectedSchool,
+                cafeteriaCount: cafeterias(for: date).count,
+                source: source
+            )
         } catch {
             let school = settings.selectedSchool ?? ""
             if !school.isEmpty {
                 errorMessage = error.localizedDescription
+                analytics.logMenuLoadFailed(
+                    date: date,
+                    schoolName: school,
+                    source: source,
+                    errorMessage: error.localizedDescription
+                )
             }
             print("[HomeViewModel] loadIfNeeded(\(key)) failed: \(error)")
         }
     }
 
     func reloadDate(_ date: Date) async {
+        await reloadDate(date, source: "pull_to_refresh")
+    }
+
+    func reloadDate(_ date: Date, source: String) async {
         let key = dateKey(date)
         loadingDates.insert(key)
         defer { loadingDates.remove(key) }
+
+        analytics.logMenuReload(date: date, source: source)
 
         do {
             let result = try await service.fetchDailyMenu(date: date, school: settings.selectedSchool ?? "")
             withAnimation(.easeInOut(duration: 0.25)) {
                 menuCache[key] = result
             }
+            analytics.logMenuLoadSucceeded(
+                date: date,
+                schoolName: settings.selectedSchool,
+                cafeteriaCount: cafeterias(for: date).count,
+                source: source
+            )
         } catch {
             errorMessage = error.localizedDescription
+            analytics.logMenuLoadFailed(
+                date: date,
+                schoolName: settings.selectedSchool,
+                source: source,
+                errorMessage: error.localizedDescription
+            )
             print("[HomeViewModel] reloadDate(\(key)) failed: \(error)")
         }
     }
@@ -160,7 +201,17 @@ final class HomeViewModel {
 
     // MARK: - Date Change
 
-    func dateDidChange() {
+    func dateDidChange(from oldValue: Date, to newValue: Date) {
+        if isCalendarPresented {
+            analytics.logCalendarDateSelected(previousDate: oldValue, selectedDate: newValue)
+        }
+
+        analytics.logMenuViewed(
+            date: newValue,
+            schoolName: settings.selectedSchool,
+            cafeteriaCount: cafeterias(for: newValue).count,
+            source: isCalendarPresented ? "calendar" : "date_change"
+        )
         isCalendarPresented = false
     }
 
@@ -168,9 +219,9 @@ final class HomeViewModel {
         let base = Calendar.current.startOfDay(for: currentDate)
         let prev = Calendar.current.date(byAdding: .day, value: -1, to: base)!
         let next = Calendar.current.date(byAdding: .day, value: 1, to: base)!
-        await loadIfNeeded(date: base)
-        await loadIfNeeded(date: prev)
-        await loadIfNeeded(date: next)
+        await loadIfNeeded(date: base, source: "current_date")
+        await loadIfNeeded(date: prev, source: "preload_previous")
+        await loadIfNeeded(date: next, source: "preload_next")
     }
     // MARK: - Meal ordering
 

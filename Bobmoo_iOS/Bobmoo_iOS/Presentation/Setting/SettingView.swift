@@ -98,6 +98,7 @@ struct UnivSettingView: View {
 
 struct WidgetSettingView: View {
     @Environment(AppSettings.self) private var settings
+    private let analytics = BobmooAnalytics.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -140,6 +141,10 @@ struct WidgetSettingView: View {
         )
         .padding(.top, 20)
         .padding(.horizontal, 20)
+        .onChange(of: settings.selectedCafeteria) { oldValue, newValue in
+            guard oldValue != newValue else { return }
+            analytics.logWidgetCafeteriaChanged(previous: oldValue, current: newValue)
+        }
     }
 }
 
