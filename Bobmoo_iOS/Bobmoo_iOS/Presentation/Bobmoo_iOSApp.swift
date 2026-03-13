@@ -6,10 +6,19 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import FirebaseAnalytics
 
 @main
 struct Bobmoo_iOSApp: App {
     @State private var settings = AppSettings()
+
+    init() {
+        FirebaseApp.configure()
+        Analytics.logEvent("debug_test", parameters: [
+            "source": "app_launch"
+        ])
+    }
 
     var body: some Scene {
         WindowGroup {

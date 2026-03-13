@@ -15,5 +15,8 @@
 .env
 config.env
 
+# Firebase local config
+Bobmoo_iOS/GoogleService-Info.plist
+
 # Sisyphus planning
 .sisyphus/
