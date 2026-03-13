@@ -21,6 +21,9 @@
 		C5828B6496A542AE95544934 /* Bobmoo_iOS/Network/APIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DBF9905BF24ECC99C174CD /* Bobmoo_iOS/Network/APIConfig.swift */; };
 		CA47C2A02F488B33000D809C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = CA47C29F2F488B33000D809C /* Alamofire */; };
 		CA47C2B12F488B33000D809C /* BobmooWidgetExtension.appex in CopyFiles */ = {isa = PBXBuildFile; fileRef = CA47C2A52F488B33000D809C /* BobmooWidgetExtension.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CAA5B2632F63B60E00BE49E3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CAA5B2622F63B60E00BE49E3 /* FirebaseAnalytics */; };
+		CAA5B2652F63B65600BE49E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAA5B2642F63B65600BE49E3 /* GoogleService-Info.plist */; };
+		CAA5B2662F63B65600BE49E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAA5B2642F63B65600BE49E3 /* GoogleService-Info.plist */; };
 		D3A4953058454F03AE9F73AB /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50C75F4D030F48788B2C98C6 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf */; };
 		DC345A57B1764B0C9C9174D0 /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54C8B177962412CB960C50A /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift */; };
 		E614BF936DFA478C8C7C00C3 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift */; };
@@ -64,6 +67,7 @@
 		BAE0912481DF4502AD55B1EE /* Bobmoo_iOS/Resource/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Bobmoo_iOS/Resource/Assets.xcassets; sourceTree = "<group>"; };
 		CA47C2A52F488B33000D809C /* BobmooWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BobmooWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA8053762F3F3CF80013A6A0 /* Bobmoo_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bobmoo_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAA5B2642F63B65600BE49E3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CF4157B7E09D491DA5CF1A75 /* Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Bobmoo_iOS/Resource/Fonts/Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
 		D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift"; sourceTree = "<group>"; };
 		E54C8B177962412CB960C50A /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift"; sourceTree = "<group>"; };
@@ -94,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAA5B2632F63B60E00BE49E3 /* FirebaseAnalytics in Frameworks */,
 				CA47C2A02F488B33000D809C /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,6 +131,7 @@
 		CA80536D2F3F3CF70013A6A0 = {
 			isa = PBXGroup;
 			children = (
+				CAA5B2642F63B65600BE49E3 /* GoogleService-Info.plist */,
 				CA8053782F3F3CF80013A6A0 /* Bobmoo_iOS */,
 				CA47C2A92F488B33000D809C /* BobmooWidgetExtension */,
 				CA8053772F3F3CF80013A6A0 /* Products */,
@@ -185,6 +191,7 @@
 			name = Bobmoo_iOS;
 			packageProductDependencies = (
 				CA47C29F2F488B33000D809C /* Alamofire */,
+				CAA5B2622F63B60E00BE49E3 /* FirebaseAnalytics */,
 			);
 			productName = Bobmoo_iOS;
 			productReference = CA8053762F3F3CF80013A6A0 /* Bobmoo_iOS.app */;
@@ -219,6 +226,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				CAA5B2612F63B60E00BE49E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CA8053772F3F3CF80013A6A0 /* Products */;
@@ -244,6 +252,7 @@
 				0ECE70815D6D4B169C3CD419 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Light.otf in Resources */,
 				B97FFD4EA4D54EB1861AE87D /* Bobmoo_iOS/Resource/Fonts/Pretendard-Medium.otf in Resources */,
 				69E1B75386F14A4EBB3ED58E /* Bobmoo_iOS/Resource/Fonts/Pretendard-Regular.otf in Resources */,
+				CAA5B2652F63B65600BE49E3 /* GoogleService-Info.plist in Resources */,
 				284017BD3F3043179BD30222 /* Bobmoo_iOS/Resource/Fonts/Pretendard-SemiBold.otf in Resources */,
 				0771FDF131BD4A4C8F128251 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Thin.otf in Resources */,
 			);
@@ -253,6 +262,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CAA5B2662F63B65600BE49E3 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,7 +509,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -535,7 +545,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -589,6 +599,14 @@
 				minimumVersion = 5.11.1;
 			};
 		};
+		CAA5B2612F63B60E00BE49E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.10.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -596,6 +614,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		CAA5B2622F63B60E00BE49E3 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CAA5B2612F63B60E00BE49E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
