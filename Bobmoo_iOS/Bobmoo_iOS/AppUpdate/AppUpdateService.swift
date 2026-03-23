@@ -84,12 +84,17 @@ struct AppUpdateAPIService: AppUpdateService {
 struct AppUpdateMockService: AppUpdateService {
 
     let result: AppUpdateResult
+    let delayNanoseconds: UInt64
 
-    init(result: AppUpdateResult = .upToDate) {
+    init(result: AppUpdateResult = .upToDate, delayNanoseconds: UInt64 = 0) {
         self.result = result
+        self.delayNanoseconds = delayNanoseconds
     }
 
     func checkForUpdate() async -> AppUpdateResult {
-        result
+        if delayNanoseconds > 0 {
+            try? await Task.sleep(nanoseconds: delayNanoseconds)
+        }
+        return result
     }
 }

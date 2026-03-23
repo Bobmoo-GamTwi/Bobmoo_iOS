@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SplashView: View {
+    private let minimumSplashDurationNanoseconds: UInt64 = 1_200_000_000
+
     let homeViewModel: HomeViewModel
     let updateService: AppUpdateService
     let hasSelectedSchool: Bool
@@ -55,14 +57,12 @@ struct SplashView: View {
             await preloadIfNeeded()
         }
 
-        Task {
-            let updateURL = await fetchUpdateURL()
-            await MainActor.run {
-                detectedUpdateURL = updateURL
-            }
-        }
+        async let minimumSplashDuration: Void = Task.sleep(nanoseconds: minimumSplashDurationNanoseconds)
+        async let updateURL = fetchUpdateURL()
 
-        try? await Task.sleep(nanoseconds: 1_200_000_000)
+        _ = try? await minimumSplashDuration
+        let detectedUpdateURL = await updateURL
+        self.detectedUpdateURL = detectedUpdateURL
         didFinish(hasSelectedSchool, detectedUpdateURL)
     }
 
@@ -92,6 +92,17 @@ struct SplashView: View {
         homeViewModel: HomeViewModel(service: HomeMockMenuService(), settings: AppSettings()),
         updateService: AppUpdateMockService(
             result: .updateAvailable(storeURL: URL(string: "itms-apps://itunes.apple.com/app/id123456789")!)
+        ),
+        hasSelectedSchool: true
+    ) { _, _ in }
+}
+
+#Preview("업데이트 지연 응답") {
+    SplashView(
+        homeViewModel: HomeViewModel(service: HomeMockMenuService(), settings: AppSettings()),
+        updateService: AppUpdateMockService(
+            result: .updateAvailable(storeURL: URL(string: "itms-apps://itunes.apple.com/app/id123456789")!),
+            delayNanoseconds: 2_000_000_000
         ),
         hasSelectedSchool: true
     ) { _, _ in }

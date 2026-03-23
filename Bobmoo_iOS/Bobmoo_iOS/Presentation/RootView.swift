@@ -113,10 +113,10 @@ struct RootView: View {
         .onChange(of: route) { oldRoute, newRoute in
             trackRoute(newRoute, entryPoint: pendingScreenEntryPoint, routeSource: oldRoute.analyticsScreen.rawValue)
             pendingScreenEntryPoint = nil
-            if newRoute == .home, pendingUpdateURL != nil {
-                analytics.logUpdatePromptViewed()
-                showUpdateAlert = true
-            }
+            presentUpdateAlertIfNeeded()
+        }
+        .onChange(of: pendingUpdateURL) { _, _ in
+            presentUpdateAlertIfNeeded()
         }
         .onOpenURL { url in
             guard url.scheme == "bobmoo" else { return }
@@ -158,6 +158,12 @@ struct RootView: View {
         withAnimation(.easeInOut(duration: 0.35)) {
             self.route = route
         }
+    }
+
+    private func presentUpdateAlertIfNeeded() {
+        guard route == .home, pendingUpdateURL != nil, !showUpdateAlert else { return }
+        analytics.logUpdatePromptViewed()
+        showUpdateAlert = true
     }
 }
 
