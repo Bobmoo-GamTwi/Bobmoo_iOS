@@ -8,6 +8,21 @@ struct RootView: View {
         case onboarding
         case home
         case setting
+
+        var analyticsScreen: BobmooScreen {
+            switch self {
+            case .search:
+                return .search
+            case .splash:
+                return .splash
+            case .onboarding:
+                return .onboarding
+            case .home:
+                return .home
+            case .setting:
+                return .setting
+            }
+        }
     }
 
     let settings: AppSettings
@@ -18,6 +33,7 @@ struct RootView: View {
     @State private var pendingUpdateURL: URL?
     @State private var showUpdateAlert = false
     @State private var didLogInitialAnalytics = false
+    @State private var pendingScreenEntryPoint: String?
 
     init(settings: AppSettings) {
         self.settings = settings
@@ -30,9 +46,7 @@ struct RootView: View {
             if route == .search {
                 SearchView(viewModel: searchViewModel) {
                     homeViewModel.resetForSchoolChange()
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        route = .home
-                    }
+                    navigate(to: .home, entryPoint: "school_selection_completed")
                 }
                 .transition(.opacity.combined(with: .move(edge: .leading)))
             }
@@ -40,32 +54,25 @@ struct RootView: View {
             if route == .splash {
                 SplashView(
                     homeViewModel: homeViewModel,
-                    hasSelectedSchool: settings.selectedSchool != nil
+                    hasSelectedSchool: settings.hasSelectedSchool
                 ) { shouldGoHome, updateURL in
                     pendingUpdateURL = updateURL
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        route = shouldGoHome ? .home : .onboarding
-                    }
+                    navigate(to: shouldGoHome ? .home : .onboarding, entryPoint: "splash")
                 }
                 .transition(.opacity.combined(with: .move(edge: .leading)))
             }
 
             if route == .onboarding {
                 OnboardingView {
-                    analytics.logOnboardingStarted(hasSelectedSchool: settings.selectedSchool != nil)
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        route = settings.selectedSchool != nil ? .home : .search
-                    }
+                    analytics.logOnboardingStarted()
+                    navigate(to: settings.hasSelectedSchool ? .home : .search, entryPoint: "onboarding")
                 }
                 .transition(.opacity.combined(with: .move(edge: .leading)))
             }
 
             if route == .home {
                 HomeView(viewModel: homeViewModel, onSetting: {
-                    analytics.logSettingsOpened(source: "home", schoolName: settings.selectedSchool)
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        route = .setting
-                    }
+                    navigate(to: .setting, entryPoint: "home")
                 })
                     .transition(.opacity.combined(with: .move(edge: .trailing)))
             }
@@ -73,14 +80,10 @@ struct RootView: View {
             if route == .setting {
                 SettingView(onBack: {
                     homeViewModel.resetForSchoolChange()
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        route = .home
-                    }
+                    navigate(to: .home, entryPoint: "setting")
                 }, onSearchSchool: {
-                    analytics.logSchoolSettingTapped(currentSchoolName: settings.selectedSchool)
-                    withAnimation(.easeInOut(duration: 0.35)) {
-                        route = .search
-                    }
+                    analytics.logSchoolSettingTapped()
+                    navigate(to: .search, entryPoint: "settings_school")
                 })
                 .transition(.opacity.combined(with: .move(edge: .trailing)))
             }
@@ -89,28 +92,29 @@ struct RootView: View {
         .task {
             guard !didLogInitialAnalytics else { return }
             didLogInitialAnalytics = true
-            analytics.logAppOpen(hasSelectedSchool: settings.selectedSchool != nil)
+            analytics.logAppOpened()
             trackRoute(route, entryPoint: "app_launch")
         }
         .alert("업데이트 안내", isPresented: $showUpdateAlert) {
             Button("업데이트") {
-                analytics.logUpdatePromptAction("update")
+                analytics.logUpdatePromptClicked(action: "update")
                 if let pendingUpdateURL {
                     UIApplication.shared.open(pendingUpdateURL)
                 }
                 pendingUpdateURL = nil
             }
             Button("나중에", role: .cancel) {
-                analytics.logUpdatePromptAction("later")
+                analytics.logUpdatePromptClicked(action: "later")
                 pendingUpdateURL = nil
             }
         } message: {
             Text("새로운 버전이 출시되었습니다.\n더 나은 경험을 위해 업데이트해 주세요.")
         }
-        .onChange(of: route) { _, newRoute in
-            trackRoute(newRoute)
+        .onChange(of: route) { oldRoute, newRoute in
+            trackRoute(newRoute, entryPoint: pendingScreenEntryPoint, routeSource: oldRoute.analyticsScreen.rawValue)
+            pendingScreenEntryPoint = nil
             if newRoute == .home, pendingUpdateURL != nil {
-                analytics.logUpdatePromptShown()
+                analytics.logUpdatePromptViewed()
                 showUpdateAlert = true
             }
         }
@@ -118,29 +122,41 @@ struct RootView: View {
             guard url.scheme == "bobmoo" else { return }
 
             let destination = url.host ?? url.pathComponents.dropFirst().first ?? "home"
-            analytics.logDeepLinkOpened(destination: destination, hasSelectedSchool: settings.selectedSchool != nil)
+            analytics.logDeepLinkOpened(destination: destination)
             if destination == "home" {
                 homeViewModel.resetForSchoolChange()
-                withAnimation(.easeInOut(duration: 0.35)) {
-                    route = settings.selectedSchool != nil ? .home : .search
-                }
+                navigate(to: settings.hasSelectedSchool ? .home : .search, entryPoint: "deep_link")
             }
         }
     }
 
-    private func trackRoute(_ route: Route, entryPoint: String? = nil) {
+    private func trackRoute(_ route: Route, entryPoint: String? = nil, routeSource: String? = nil) {
         switch route {
         case .search:
-            analytics.logScreenView(.search, entryPoint: entryPoint)
+            analytics.logSearchViewed(entryPoint: entryPoint, routeSource: routeSource)
         case .splash:
-            analytics.logScreenView(.splash, entryPoint: entryPoint)
+            analytics.logSplashViewed(entryPoint: entryPoint, routeSource: routeSource)
         case .onboarding:
-            analytics.logScreenView(.onboarding, entryPoint: entryPoint)
+            analytics.logOnboardingViewed(entryPoint: entryPoint, routeSource: routeSource)
         case .home:
-            analytics.logScreenView(.home, entryPoint: entryPoint)
-            analytics.logHomeOpened(schoolName: settings.selectedSchool, date: homeViewModel.currentDate)
+            analytics.logHomeViewed(
+                date: homeViewModel.currentDate,
+                entryPoint: entryPoint,
+                routeSource: routeSource
+            )
         case .setting:
-            analytics.logScreenView(.setting, entryPoint: entryPoint)
+            analytics.logSettingsViewed(
+                source: routeSource ?? "unknown",
+                entryPoint: entryPoint,
+                routeSource: routeSource
+            )
+        }
+    }
+
+    private func navigate(to route: Route, entryPoint: String? = nil) {
+        pendingScreenEntryPoint = entryPoint
+        withAnimation(.easeInOut(duration: 0.35)) {
+            self.route = route
         }
     }
 }

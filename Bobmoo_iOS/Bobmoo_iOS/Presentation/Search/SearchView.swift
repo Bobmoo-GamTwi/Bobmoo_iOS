@@ -32,6 +32,7 @@ struct SearchView: View {
                     selectedSchoolId: viewModel.selectedSchoolId,
                     schoolName: viewModel.selectedSchoolName
                 )
+                analytics.refreshUserProperties()
                 didComplete()
             }
             .padding(.horizontal, 40)

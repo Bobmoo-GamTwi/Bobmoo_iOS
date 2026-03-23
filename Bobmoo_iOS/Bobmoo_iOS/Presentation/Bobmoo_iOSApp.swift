@@ -7,17 +7,33 @@
 
 import SwiftUI
 import FirebaseCore
-import FirebaseAnalytics
 
 @main
 struct Bobmoo_iOSApp: App {
-    @State private var settings = AppSettings()
+    @State private var settings: AppSettings
 
     init() {
+        let appSettings = AppSettings()
+        _settings = State(initialValue: appSettings)
+
         FirebaseApp.configure()
-        Analytics.logEvent("debug_test", parameters: [
-            "source": "app_launch"
-        ])
+
+        let analyticsConfiguration = AnalyticsConfiguration.fromBundle()
+        var clients: [AnalyticsClient] = [FirebaseAnalyticsClient()]
+
+        if let amplitudeAPIKey = analyticsConfiguration.amplitudeAPIKey {
+            clients.append(AmplitudeAnalyticsClient(apiKey: amplitudeAPIKey))
+        } else {
+#if DEBUG
+            print("[Analytics] Missing AMPLITUDE_API_KEY. Firebase-only collection is active.")
+#endif
+        }
+
+        BobmooAnalytics.shared.configure(
+            client: CompositeAnalyticsClient(clients: clients),
+            settings: appSettings,
+            environment: analyticsConfiguration.environment
+        )
     }
 
     var body: some Scene {

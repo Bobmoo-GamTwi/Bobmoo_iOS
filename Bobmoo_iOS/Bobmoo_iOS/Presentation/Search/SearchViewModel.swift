@@ -26,8 +26,9 @@ final class SearchViewModel {
     }
 
     var selectedSchoolName: String? {
-        guard let selectedSchoolId else { return nil }
+        guard let selectedSchoolId else { return settings.selectedSchool }
         return allSchools.first { $0.schoolId == selectedSchoolId }?.queryName
+            ?? settings.selectedSchool
     }
 
     private var allSchools: [School] = []
@@ -35,6 +36,7 @@ final class SearchViewModel {
     init(service: SearchSchoolService, settings: AppSettings) {
         self.service = service
         self.settings = settings
+        self.selectedSchoolId = settings.selectedSchoolId
         
         // 뷰 진입 시 전체 학교 목록 로드
         Task {
@@ -49,7 +51,7 @@ final class SearchViewModel {
             withAnimation(.easeInOut(duration: 0.25)) {
                 schools = allSchools
             }
-            analytics.logSearchResultsLoaded(count: allSchools.count)
+            analytics.logSchoolDirectoryLoaded(count: allSchools.count)
         } catch {
             errorMessage = error.localizedDescription
             print("[SearchViewModel] loadAllSchools failed: \(error)")
@@ -65,7 +67,7 @@ final class SearchViewModel {
             withAnimation(.easeInOut(duration: 0.25)) {
                 schools = allSchools
             }
-            analytics.logSearch(queryLength: 0, resultCount: schools.count, isEmptyQuery: true)
+            analytics.logSchoolSearchPerformed(queryLength: 0, resultCount: schools.count, isEmptyQuery: true)
             return
         }
 
@@ -78,13 +80,15 @@ final class SearchViewModel {
             }
         }
 
-        analytics.logSearch(queryLength: trimmedQuery.count, resultCount: schools.count, isEmptyQuery: false)
+        analytics.logSchoolSearchPerformed(queryLength: trimmedQuery.count, resultCount: schools.count, isEmptyQuery: false)
     }
 
     func selectSchool(_ school: School) {
         selectedSchoolId = school.schoolId
+        settings.selectedSchoolId = school.schoolId
         settings.selectedSchool = school.queryName
         settings.selectedSchoolColor = school.schoolColor
+        analytics.refreshUserProperties()
         analytics.logSchoolSelected(id: school.schoolId, name: school.queryName)
     }
 }
