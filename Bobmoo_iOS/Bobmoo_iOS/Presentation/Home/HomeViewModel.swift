@@ -39,7 +39,7 @@ final class HomeViewModel {
         let offset = newTab - 1
         let base = Calendar.current.startOfDay(for: currentDate)
         let updatedDate = Calendar.current.date(byAdding: .day, value: offset, to: base)!
-        analytics.logDateSwiped(
+        analytics.logHomeDateSwiped(
             direction: offset > 0 ? "next" : "previous",
             fromDate: base,
             toDate: updatedDate
@@ -126,7 +126,6 @@ final class HomeViewModel {
             }
             analytics.logMenuLoadSucceeded(
                 date: date,
-                schoolName: settings.selectedSchool,
                 cafeteriaCount: cafeterias(for: date).count,
                 source: source
             )
@@ -136,9 +135,8 @@ final class HomeViewModel {
                 errorMessage = error.localizedDescription
                 analytics.logMenuLoadFailed(
                     date: date,
-                    schoolName: school,
                     source: source,
-                    errorMessage: error.localizedDescription
+                    error: error
                 )
             }
             print("[HomeViewModel] loadIfNeeded(\(key)) failed: \(error)")
@@ -154,7 +152,7 @@ final class HomeViewModel {
         loadingDates.insert(key)
         defer { loadingDates.remove(key) }
 
-        analytics.logMenuReload(date: date, source: source)
+        analytics.logMenuReloadRequested(date: date, source: source)
 
         do {
             let result = try await service.fetchDailyMenu(date: date, school: settings.selectedSchool ?? "")
@@ -163,7 +161,6 @@ final class HomeViewModel {
             }
             analytics.logMenuLoadSucceeded(
                 date: date,
-                schoolName: settings.selectedSchool,
                 cafeteriaCount: cafeterias(for: date).count,
                 source: source
             )
@@ -171,9 +168,8 @@ final class HomeViewModel {
             errorMessage = error.localizedDescription
             analytics.logMenuLoadFailed(
                 date: date,
-                schoolName: settings.selectedSchool,
                 source: source,
-                errorMessage: error.localizedDescription
+                error: error
             )
             print("[HomeViewModel] reloadDate(\(key)) failed: \(error)")
         }
@@ -208,7 +204,6 @@ final class HomeViewModel {
 
         analytics.logMenuViewed(
             date: newValue,
-            schoolName: settings.selectedSchool,
             cafeteriaCount: cafeterias(for: newValue).count,
             source: isCalendarPresented ? "calendar" : "date_change"
         )

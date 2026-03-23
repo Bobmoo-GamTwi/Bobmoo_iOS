@@ -24,6 +24,7 @@
 		CAA5B2632F63B60E00BE49E3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = CAA5B2622F63B60E00BE49E3 /* FirebaseAnalytics */; };
 		CAA5B2652F63B65600BE49E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAA5B2642F63B65600BE49E3 /* GoogleService-Info.plist */; };
 		CAA5B2662F63B65600BE49E3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CAA5B2642F63B65600BE49E3 /* GoogleService-Info.plist */; };
+		D1A100012F70000100A1A1A1 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D1A100032F70000100A1A1A1 /* AmplitudeSwift */; };
 		D3A4953058454F03AE9F73AB /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 50C75F4D030F48788B2C98C6 /* Bobmoo_iOS/Resource/Fonts/Pretendard-Bold.otf */; };
 		DC345A57B1764B0C9C9174D0 /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54C8B177962412CB960C50A /* Bobmoo_iOS/Resource/Extensions/OperationPeriod+Parse.swift */; };
 		E614BF936DFA478C8C7C00C3 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9F071566EDF4EDC96BC62F1 /* Bobmoo_iOS/Resource/Extensions/UserDefaults+BobmooShared.swift */; };
@@ -98,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1A100012F70000100A1A1A1 /* AmplitudeSwift in Frameworks */,
 				CAA5B2632F63B60E00BE49E3 /* FirebaseAnalytics in Frameworks */,
 				CA47C2A02F488B33000D809C /* Alamofire in Frameworks */,
 			);
@@ -191,6 +193,7 @@
 			name = Bobmoo_iOS;
 			packageProductDependencies = (
 				CA47C29F2F488B33000D809C /* Alamofire */,
+				D1A100032F70000100A1A1A1 /* AmplitudeSwift */,
 				CAA5B2622F63B60E00BE49E3 /* FirebaseAnalytics */,
 			);
 			productName = Bobmoo_iOS;
@@ -226,6 +229,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */,
+				D1A100022F70000100A1A1A1 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 				CAA5B2612F63B60E00BE49E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -317,7 +321,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS.BobmooWidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -348,7 +352,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS.BobmooWidgetExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -489,6 +493,8 @@
 		CA8053822F3F3CF80013A6A0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AMPLITUDE_API_KEY = "$(AMPLITUDE_API_KEY_DEBUG)";
+				ANALYTICS_ENVIRONMENT = debug;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bobmoo_iOS/Bobmoo_iOS.entitlements;
@@ -509,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -525,6 +531,8 @@
 		CA8053832F3F3CF80013A6A0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AMPLITUDE_API_KEY = "$(AMPLITUDE_API_KEY_RELEASE)";
+				ANALYTICS_ENVIRONMENT = release;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Bobmoo_iOS/Bobmoo_iOS.entitlements;
@@ -545,7 +553,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 3.3;
 				PRODUCT_BUNDLE_IDENTIFIER = soseoyo.BabmooiOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -599,6 +607,14 @@
 				minimumVersion = 5.11.1;
 			};
 		};
+		D1A100022F70000100A1A1A1 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.5;
+			};
+		};
 		CAA5B2612F63B60E00BE49E3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -614,6 +630,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA47C29E2F488B33000D809C /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		D1A100032F70000100A1A1A1 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D1A100022F70000100A1A1A1 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
 		};
 		CAA5B2622F63B60E00BE49E3 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

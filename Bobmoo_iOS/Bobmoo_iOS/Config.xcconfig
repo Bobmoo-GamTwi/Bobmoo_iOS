@@ -10,3 +10,7 @@
 
 BASE_URL = https:/$()/bobmoo.site/api/v1
 APP_URL_SCHEME = bobmoo
+
+// Fill these values per build configuration in Xcode or a local xcconfig override.
+AMPLITUDE_API_KEY_DEBUG = 83e314317821312fa6c62ae1d8bd7fd2
+AMPLITUDE_API_KEY_RELEASE = 83e314317821312fa6c62ae1d8bd7fd2

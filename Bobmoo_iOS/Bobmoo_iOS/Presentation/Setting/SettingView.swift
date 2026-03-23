@@ -143,6 +143,7 @@ struct WidgetSettingView: View {
         .padding(.horizontal, 20)
         .onChange(of: settings.selectedCafeteria) { oldValue, newValue in
             guard oldValue != newValue else { return }
+            analytics.refreshUserProperties()
             analytics.logWidgetCafeteriaChanged(previous: oldValue, current: newValue)
         }
     }
